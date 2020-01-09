@@ -41,14 +41,14 @@ class ExampleInstrumentedTest {
 
     @Test
     fun useAppContext() {
-        runBlocking {
-            whenever(repository.getProducts())
-                .thenReturn(NetworkResponse.Success(Any()))
-            //both repo and viewmodel mocks will be injected by dagger
-
-            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-            assertEquals("com.raul.androidapps.lanaapplication", appContext.packageName)
-        }
+//        runBlocking {
+//            whenever(repository.getProducts())
+//                .thenReturn(NetworkResponse.Success(Any()))
+//            //both repo and viewmodel mocks will be injected by dagger
+//
+//            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+//            assertEquals("com.raul.androidapps.lanaapplication", appContext.packageName)
+//        }
 
     }
 }
