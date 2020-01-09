@@ -131,6 +131,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
     def lifecycleVersion = '2.1.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
