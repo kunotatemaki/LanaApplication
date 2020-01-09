@@ -42,7 +42,7 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         runBlocking {
-            whenever(repository.getFoo())
+            whenever(repository.getProducts())
                 .thenReturn(NetworkResponse.Success(Any()))
             //both repo and viewmodel mocks will be injected by dagger
 

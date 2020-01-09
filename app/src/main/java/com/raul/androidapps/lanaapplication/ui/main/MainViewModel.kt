@@ -26,7 +26,7 @@ open class MainViewModel constructor(private val repository: Repository) : ViewM
     fun getFoo(): Job =
         viewModelScope.launch(Dispatchers.IO) {
             loading.postValue(true)
-            when (val response = repository.getFoo()) {
+            when (val response = repository.getProducts()) {
                 is NetworkResponse.Success -> {
                     loading.postValue(false)
                     foo.postValue(response.data)

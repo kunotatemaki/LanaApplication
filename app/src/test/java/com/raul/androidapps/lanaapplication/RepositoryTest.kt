@@ -56,7 +56,7 @@ class RepositoryTest {
                 .thenReturn(
                     Response.success(200, list)
                 )
-            val response = repository.getFoo()
+            val response = repository.getProducts()
             assertTrue(response is NetworkResponse.Success)
             assertEquals((response as NetworkResponse.Success).data, list)
         }
@@ -75,7 +75,7 @@ class RepositoryTest {
                         )
                     )
                 )
-            val response = repository.getFoo()
+            val response = repository.getProducts()
             assertTrue(response is NetworkResponse.Failure)
             assertEquals((response as NetworkResponse.Failure).message, "Response.error()")
         }
@@ -89,7 +89,7 @@ class RepositoryTest {
                 .then {
                     1 / 0
                 }
-            val response = repository.getFoo()
+            val response = repository.getProducts()
             assertTrue(response is NetworkResponse.Failure)
             assertEquals((response as NetworkResponse.Failure).message, "error fetching from network")
         }

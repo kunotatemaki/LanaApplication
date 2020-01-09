@@ -37,7 +37,7 @@ class MainViewModelTest {
     @Test
     fun getFooSuccess() {
         runBlocking {
-            whenever(repository.getFoo())
+            whenever(repository.getProducts())
                 .thenReturn(NetworkResponse.Success(successResponse))
 
             val testObserver = viewModel.needToShowLoading().test()
@@ -57,7 +57,7 @@ class MainViewModelTest {
     fun getFooError() {
         val error = "some error"
         runBlocking {
-            whenever(repository.getFoo())
+            whenever(repository.getProducts())
                 .thenReturn(NetworkResponse.Failure(error))
 
             val testObserver = viewModel.needToShowLoading().test()
