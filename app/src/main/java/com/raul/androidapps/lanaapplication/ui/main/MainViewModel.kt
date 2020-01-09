@@ -25,7 +25,7 @@ open class MainViewModel constructor(private val repository: Repository) : ViewM
         Transformations.distinctUntilChanged(products)
 
 
-    fun test(){
+    fun refresh(){
         fetchTrigger.value = System.currentTimeMillis()
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,6 +13,7 @@ import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.extensions.nonNull
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
+import com.raul.androidapps.lanaapplication.vo.Result
 import okhttp3.internal.notify
 import timber.log.Timber
 
@@ -41,12 +43,24 @@ class MainFragment : BaseFragment() {
         viewModel.getProductsAsObservable()
             .observe(viewLifecycleOwner, Observer {
                 it?.let{
+                    when(it.status){
+                        Result.Status.SUCCESS -> {
+                            hideLoading()
+                        }
+                        Result.Status.ERROR -> {
+                            hideLoading()
+                            showError(it.message)
+                        }
+                        Result.Status.LOADING -> {
+                            showLoading()
+                        }
+                    }
                     Timber.d("")
                 }
                 // use the response from server
             })
         binding.message.setOnClickListener {
-            viewModel.test()
+            viewModel.refresh()
         }
 //        viewModel.needToShowLoading()
 //            .nonNull()
@@ -79,7 +93,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun showError(message: String?) {
-        //todo implement error function
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
 }

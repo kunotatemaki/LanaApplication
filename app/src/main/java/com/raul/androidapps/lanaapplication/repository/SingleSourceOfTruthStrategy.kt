@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.raul.androidapps.lanaapplication.vo.Result
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 
 
 fun <T, A> resultLiveData(
