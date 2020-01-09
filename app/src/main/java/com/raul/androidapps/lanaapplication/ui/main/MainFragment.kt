@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.extensions.nonNull
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
+import okhttp3.internal.notify
+import timber.log.Timber
 
 class MainFragment : BaseFragment() {
 
@@ -35,29 +38,35 @@ class MainFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.getFooAsObservable()
-            .observe(this, Observer {
+        viewModel.getProductsAsObservable()
+            .observe(viewLifecycleOwner, Observer {
+                it?.let{
+                    Timber.d("")
+                }
                 // use the response from server
             })
-        viewModel.needToShowLoading()
-            .nonNull()
-            .observe(this, Observer {
-                if (it == true) {
-                    showLoading()
-                } else {
-                    hideLoading()
-                }
-            })
-        viewModel.needToShowError()
-            .observe(this, Observer { message ->
-                if (message != null) {
-                    showError(message)
-                } else {
-                    viewModel.resetError()
-                }
-            })
-
-        viewModel.getFoo()
+        binding.message.setOnClickListener {
+            viewModel.test()
+        }
+//        viewModel.needToShowLoading()
+//            .nonNull()
+//            .observe(this, Observer {
+//                if (it == true) {
+//                    showLoading()
+//                } else {
+//                    hideLoading()
+//                }
+//            })
+//        viewModel.needToShowError()
+//            .observe(this, Observer { message ->
+//                if (message != null) {
+//                    showError(message)
+//                } else {
+//                    viewModel.resetError()
+//                }
+//            })
+//
+//        viewModel.getFoo()
 
     }
 

@@ -49,49 +49,49 @@ class RepositoryTest {
             )
     }
 
-    @Test
-    fun testResponseSuccess() {
-        runBlocking {
-            whenever(api.getFoo(anyString(), anyLong(), anyString()))
-                .thenReturn(
-                    Response.success(200, list)
-                )
-            val response = repository.getProducts()
-            assertTrue(response is NetworkResponse.Success)
-            assertEquals((response as NetworkResponse.Success).data, list)
-        }
-    }
-
-    @Test
-    fun testResponseError() {
-        runBlocking {
-
-            whenever(api.getFoo(anyString(), anyLong(), anyString()))
-                .thenReturn(
-                    Response.error(
-                        500,
-                        "{\"message\":\"some_value\"}".toResponseBody(
-                            "application/json".toMediaType()
-                        )
-                    )
-                )
-            val response = repository.getProducts()
-            assertTrue(response is NetworkResponse.Failure)
-            assertEquals((response as NetworkResponse.Failure).message, "Response.error()")
-        }
-    }
-
-    @Suppress("DIVISION_BY_ZERO")
-    @Test
-    fun testResponseException() {
-        runBlocking {
-            whenever(api.getFoo(anyString(), anyLong(), anyString()))
-                .then {
-                    1 / 0
-                }
-            val response = repository.getProducts()
-            assertTrue(response is NetworkResponse.Failure)
-            assertEquals((response as NetworkResponse.Failure).message, "error fetching from network")
-        }
-    }
+//    @Test
+//    fun testResponseSuccess() {
+//        runBlocking {
+//            whenever(api.getFoo(anyString(), anyLong(), anyString()))
+//                .thenReturn(
+//                    Response.success(200, list)
+//                )
+//            val response = repository.getProducts()
+//            assertTrue(response is NetworkResponse.Success)
+//            assertEquals((response as NetworkResponse.Success).data, list)
+//        }
+//    }
+//
+//    @Test
+//    fun testResponseError() {
+//        runBlocking {
+//
+//            whenever(api.getFoo(anyString(), anyLong(), anyString()))
+//                .thenReturn(
+//                    Response.error(
+//                        500,
+//                        "{\"message\":\"some_value\"}".toResponseBody(
+//                            "application/json".toMediaType()
+//                        )
+//                    )
+//                )
+//            val response = repository.getProducts()
+//            assertTrue(response is NetworkResponse.Failure)
+//            assertEquals((response as NetworkResponse.Failure).message, "Response.error()")
+//        }
+//    }
+//
+//    @Suppress("DIVISION_BY_ZERO")
+//    @Test
+//    fun testResponseException() {
+//        runBlocking {
+//            whenever(api.getFoo(anyString(), anyLong(), anyString()))
+//                .then {
+//                    1 / 0
+//                }
+//            val response = repository.getProducts()
+//            assertTrue(response is NetworkResponse.Failure)
+//            assertEquals((response as NetworkResponse.Failure).message, "error fetching from network")
+//        }
+//    }
 }

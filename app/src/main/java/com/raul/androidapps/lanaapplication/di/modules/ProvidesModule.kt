@@ -5,6 +5,7 @@ import com.raul.androidapps.lanaapplication.MyApplication
 import com.raul.androidapps.lanaapplication.persistence.databases.AppDatabase
 import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
+import com.raul.androidapps.lanaapplication.utils.RateLimiter
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,6 +13,9 @@ import javax.inject.Singleton
 @Module(includes = [(ViewModelModule::class)])
 class ProvidesModule {
 
+    @Singleton
+    @Provides
+    fun providesRateLimiter(): RateLimiter = RateLimiter()
 
     @Provides
     fun providesContext(application: MyApplication): Context = application.applicationContext

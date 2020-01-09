@@ -12,11 +12,11 @@ class PersistenceManagerImpl @Inject constructor(
     private val db: AppDatabase
 ) : PersistenceManager {
 
-    override suspend fun getProducts(): LiveData<List<ProductEntity>>  =
+    override fun getProducts(): LiveData<List<ProductEntity>>  =
         db.productDao().getProducts()
 
     override suspend fun storeProducts(products: List<Item>) {
-        db.productDao().insert(products.map { ProductEntity(code = it.code, name = it.name, price = it.price) })
+        db.productDao().insert(products.map { ProductEntity.from(it) })
     }
 }
 

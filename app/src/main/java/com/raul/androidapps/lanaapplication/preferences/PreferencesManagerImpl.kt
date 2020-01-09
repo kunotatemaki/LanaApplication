@@ -1,7 +1,7 @@
 package com.raul.androidapps.lanaapplication.preferences
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.raul.androidapps.lanaapplication.security.Encryption
 import javax.inject.Inject
 import javax.inject.Singleton

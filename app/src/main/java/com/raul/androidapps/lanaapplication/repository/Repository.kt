@@ -1,10 +1,11 @@
 package com.raul.androidapps.lanaapplication.repository
 
-import com.raul.androidapps.lanaapplication.domain.NetworkResponse
-import com.raul.androidapps.lanaapplication.domain.Products
+import androidx.lifecycle.LiveData
+import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
+import com.raul.androidapps.lanaapplication.vo.Result
 
 interface Repository {
 
-    suspend fun getProducts(): NetworkResponse<Products>
+    fun getProducts(forceFetchInfo: Boolean = false): LiveData<Result<List<ProductEntity>>>
 
 }
