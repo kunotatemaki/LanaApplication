@@ -12,11 +12,23 @@ class PersistenceManagerImpl @Inject constructor(
     private val db: AppDatabase
 ) : PersistenceManager {
 
-    override fun getProducts(): LiveData<List<ProductEntity>>  =
+    override fun getProducts(): LiveData<List<ProductEntity>> =
         db.productDao().getProducts()
 
     override suspend fun storeProducts(products: List<Item>) {
         db.productDao().insert(products.map { ProductEntity.from(it) })
+    }
+
+    override suspend fun addProductToBasket(code: String) {
+        db.basketDao().insertAndDeleteInTransaction(code, 1)
+    }
+
+    override suspend fun removeProductFromBasket(code: String) {
+        db.basketDao().insertAndDeleteInTransaction(code, -1)
+    }
+
+    override suspend fun clearBasket() {
+        db.basketDao().delete()
     }
 }
 

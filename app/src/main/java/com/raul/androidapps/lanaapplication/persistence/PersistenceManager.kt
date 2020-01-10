@@ -8,5 +8,8 @@ interface PersistenceManager {
 
     fun getProducts(): LiveData<List<ProductEntity>>
     suspend fun storeProducts(products: List<Item>)
+    suspend fun addProductToBasket(code: String)
+    suspend fun removeProductFromBasket(code: String)
+    suspend fun clearBasket()
 
 }
