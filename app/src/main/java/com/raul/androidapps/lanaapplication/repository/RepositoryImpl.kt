@@ -33,7 +33,7 @@ class RepositoryImpl @Inject constructor(
     override fun getProducts(forceFetchInfo: Boolean): LiveData<Result<List<ProductEntity>>> =
         resultLiveData(
             databaseQuery = {
-                getProductsFromDb()
+                getProductsFromCache()
             },
             networkCall = {
                 fetchFromNetwork()
@@ -66,7 +66,7 @@ class RepositoryImpl @Inject constructor(
             persistenceManager.clearBasket()
         }
 
-    private fun getProductsFromDb(): LiveData<List<ProductEntity>> =
+    override fun getProductsFromCache(): LiveData<List<ProductEntity>>  =
         persistenceManager.getProducts()
 
     private fun shouldFetch(): Boolean {

@@ -3,20 +3,22 @@ package com.raul.androidapps.lanaapplication.domain
 import com.nhaarman.mockitokotlin2.whenever
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
+import com.raul.androidapps.lanaapplication.utils.cfoDiscount
 import com.raul.androidapps.lanaapplication.utils.marketingDiscount
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 
 class DiscountsHelperKtTest {
 
-    val pen = Product("PEN", "Lana Voucher", 5.0)
-    val tshirt = Product("TSHIRT", "Lana T-Shirt", 20.0)
-    val mug = Product("MUG", "Lana Coffee Mug", 7.5)
+    private val pen = Product("PEN", "Lana Voucher", 5.0)
+    private val tshirt = Product("TSHIRT", "Lana T-Shirt", 20.0)
+    private val mug = Product("MUG", "Lana Coffee Mug", 7.5)
+    private val products = listOf(pen, tshirt, mug)
 
     private val marketingDescription = "marketing description"
     private val cfoDescription = "cfo description"
@@ -38,12 +40,8 @@ class DiscountsHelperKtTest {
     }
 
     @Test
-    fun calculateDiscounts() {
-    }
-
-    @Test
     fun marketingDiscountOdd() {
-        val products = listOf(pen, pen, pen, pen, pen)
+        products.first { it.code == "PEN" }.timesInBasket = 5
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -52,7 +50,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountEven() {
-        val products = listOf(pen, pen, pen, pen)
+        products.first { it.code == "PEN" }.timesInBasket = 4
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -61,7 +59,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountLessThan2() {
-        val products = listOf(pen)
+        products.first { it.code == "PEN" }.timesInBasket = 1
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -70,7 +68,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountEmptyList() {
-        val products = listOf<Product>()
+        products.first { it.code == "PEN" }.timesInBasket = 0
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -78,6 +76,41 @@ class DiscountsHelperKtTest {
     }
 
     @Test
-    fun cfoDiscount() {
+    fun cfoDiscount3Tshirts() {
+        products.first { it.code == "TSHIRT" }.timesInBasket = 3
+        val discount = cfoDiscount(products, resourcesManager)
+        assertNotNull(discount)
+        assertEquals(discount.description, cfoDescription)
+        assertEquals(discount.savedMoney, 3.0, 0.009)
     }
+
+    @Test
+    fun cfoDiscountMoreThan3Tshirts() {
+        products.first { it.code == "TSHIRT" }.timesInBasket = 7
+        val discount = cfoDiscount(products, resourcesManager)
+        assertNotNull(discount)
+        assertEquals(discount.description, cfoDescription)
+        assertEquals(discount.savedMoney, 7.0, 0.009)
+    }
+
+    @Test
+    fun cfoDiscount2Tshirts() {
+        products.first { it.code == "TSHIRT" }.timesInBasket = 2
+        val discount = cfoDiscount(products, resourcesManager)
+        assertNotNull(discount)
+        assertEquals(discount.description, cfoDescription)
+        assertEquals(discount.savedMoney, 0.0, 0.009)
+    }
+
+    @Test
+    fun cfoDiscount0Tshirts() {
+        products.first { it.code == "TSHIRT" }.timesInBasket = 0
+        val discount = cfoDiscount(products, resourcesManager)
+        assertNotNull(discount)
+        assertEquals(discount.description, cfoDescription)
+        assertEquals(discount.savedMoney, 0.0, 0.009)
+    }
+
+
+
 }

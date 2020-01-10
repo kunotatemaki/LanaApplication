@@ -8,6 +8,7 @@ import com.raul.androidapps.lanaapplication.vo.Result
 interface Repository {
 
     fun getProducts(forceFetchInfo: Boolean = false): LiveData<Result<List<ProductEntity>>>
+    fun getProductsFromCache(): LiveData<List<ProductEntity>>
     fun getProductsInBasket(): LiveData<List<BasketEntity>>
     suspend fun addProductToBasket(code: String)
     suspend fun removeProductFromBasket(code: String)

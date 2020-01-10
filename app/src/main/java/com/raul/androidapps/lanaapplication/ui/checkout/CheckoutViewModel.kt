@@ -1,70 +1,57 @@
 package com.raul.androidapps.lanaapplication.ui.checkout
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
+import com.raul.androidapps.lanaapplication.domain.Checkout
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.persistence.entities.BasketEntity
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 import com.raul.androidapps.lanaapplication.repository.Repository
-import com.raul.androidapps.lanaapplication.vo.Result
+import com.raul.androidapps.lanaapplication.resources.ResourcesManager
+import com.raul.androidapps.lanaapplication.utils.calculateDiscounts
 import kotlinx.coroutines.launch
 
-open class CheckoutViewModel constructor(private val repository: Repository) : ViewModel() {
+open class CheckoutViewModel constructor(
+    private val repository: Repository,
+    private val resourcesManager: ResourcesManager
+) : ViewModel() {
 
-//    private var products: MediatorLiveData<Result<List<Product>>> = MediatorLiveData()
-//    private var productsFromDb: LiveData<Result<List<ProductEntity>>>
-//    private var productsIbBasket: LiveData<List<BasketEntity>> = repository.getProductsInBasket()
+    private var checkoutInfo: MediatorLiveData<Checkout> = MediatorLiveData()
+    private var productsFromDb: LiveData<List<ProductEntity>> = repository.getProductsFromCache()
+    private var productsIbBasket: LiveData<List<BasketEntity>> = repository.getProductsInBasket()
 
-//    @VisibleForTesting
-//    val fetchTrigger = MutableLiveData<Long>()
-//
-//    init {
-//        productsFromDb = fetchTrigger.switchMap {
-//            if (it == null || it == 0L) {
-//                repository.getProducts()
-//            } else {
-//                repository.getProducts(true)
-//            }
-//        }
-//        products.apply {
-//            addSource(productsFromDb) {
-//                getProductsWithBasketInfo()
-//            }
-//            addSource(productsIbBasket) {
-//                getProductsWithBasketInfo()
-//            }
-//        }
-//        fetchTrigger.value = 0
-//    }
 
-//    private fun getProductsWithBasketInfo() {
-//        val list = productsFromDb.value?.data?.map { product -> Product.from(product) }
-//        //add info about how many times the item has been added to the basket
-//        list?.forEach { product ->
-//            product.timesInBasket =
-//                productsIbBasket.value?.firstOrNull { itemInBasket -> itemInBasket.code == product.code }?.selections
-//                    ?: 0
-//        }
-//
-//        val result = when (productsFromDb.value?.status) {
-//            Result.Status.SUCCESS -> Result.success(list)
-//            Result.Status.LOADING -> Result.loading(list)
-//            Result.Status.ERROR -> Result.error(productsFromDb.value?.message, list)
-//            else -> null
-//        }
-//        products.value = result
-//    }
+    init {
 
-//    fun getProductsAsObservable(): LiveData<Result<List<Product>>> =
-//        Transformations.distinctUntilChanged(products)
+        checkoutInfo.apply {
+            addSource(productsFromDb) {
+                getCheckoutInfo()
+            }
+            addSource(productsIbBasket) {
+                getCheckoutInfo()
+            }
+        }
+    }
+
+    private fun getCheckoutInfo() {
+        val list = productsFromDb.value?.map { product -> Product.from(product) }
+        //add info about how many times the item has been added to the basket
+        list?.forEach { product ->
+            product.timesInBasket =
+                productsIbBasket.value?.firstOrNull { itemInBasket -> itemInBasket.code == product.code }?.selections
+                    ?: 0
+        }
+        //calculate discounts
+        val discounts = calculateDiscounts(products = list, resourcesManager = resourcesManager)
+        checkoutInfo.value = Checkout(products = list ?: listOf(), discounts = discounts)
+    }
+
+    fun getCheckoutAsObservable(): LiveData<Checkout> =
+        Transformations.distinctUntilChanged(checkoutInfo)
 
 
     fun clearBasket() =
         viewModelScope.launch {
             repository.clearBasket()
         }
-
-//    fun getSelectedItems(): Int =
-//        productsIbBasket.value?.sumBy { it.selections } ?: 0
 
 }

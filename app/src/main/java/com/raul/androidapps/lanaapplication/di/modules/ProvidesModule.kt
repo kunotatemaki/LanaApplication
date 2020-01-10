@@ -4,6 +4,7 @@ import android.content.Context
 import com.raul.androidapps.lanaapplication.MyApplication
 import com.raul.androidapps.lanaapplication.persistence.databases.AppDatabase
 import com.raul.androidapps.lanaapplication.repository.Repository
+import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutViewModel
 import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
@@ -31,7 +32,7 @@ class ProvidesModule {
     fun provideMainViewModel(repository: Repository): MainViewModel = MainViewModel(repository)
 
     @Provides
-    fun provideCheckoutViewModel(repository: Repository): CheckoutViewModel = CheckoutViewModel(repository)
+    fun provideCheckoutViewModel(repository: Repository, resourcesManager: ResourcesManager): CheckoutViewModel = CheckoutViewModel(repository, resourcesManager)
 
 
 }

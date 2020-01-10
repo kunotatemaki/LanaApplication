@@ -37,8 +37,8 @@ open class AppModuleForTest {
         MainViewModel(repository)
 
     @Provides
-    open fun providesCheckoutViewModel(repository: Repository): CheckoutViewModel =
-        CheckoutViewModel(repository)
+    open fun providesCheckoutViewModel(repository: Repository, resourcesManager: ResourcesManager): CheckoutViewModel =
+        CheckoutViewModel(repository, resourcesManager)
 
     @Singleton
     @Provides
