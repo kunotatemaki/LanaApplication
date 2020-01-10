@@ -8,11 +8,15 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
+import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
 import com.raul.androidapps.lanaapplication.vo.Result
 import timber.log.Timber
+
 
 class MainFragment : BaseFragment() {
 
@@ -33,8 +37,12 @@ class MainFragment : BaseFragment() {
             false,
             bindingComponent
         )
-        adapter = ProductAdapter(bindingComponent)
-        binding.productList.adapter = adapter
+        adapter = ProductAdapter(bindingComponent, resourcesManager)
+        binding.productList.apply {
+            adapter = this@MainFragment.adapter
+            val itemDecor = DividerItemDecoration(context, VERTICAL)
+            addItemDecoration(itemDecor)
+        }
         return binding.root
     }
 
@@ -80,3 +88,5 @@ class MainFragment : BaseFragment() {
     }
 
 }
+
+//todo implement pull to refresh

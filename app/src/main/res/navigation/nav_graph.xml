@@ -7,6 +7,6 @@
 
     <fragment android:id="@+id/main_fragment"
               android:name="com.raul.androidapps.lanaapplication.ui.main.MainFragment"
-              android:label="main_fragment" tools:layout="@layout/main_fragment"/>
+              android:label="@string/products_title" tools:layout="@layout/main_fragment"/>
 
 </navigation>

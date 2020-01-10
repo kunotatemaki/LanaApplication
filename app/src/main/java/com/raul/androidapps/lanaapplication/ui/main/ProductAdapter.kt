@@ -1,5 +1,7 @@
 package com.raul.androidapps.lanaapplication.ui.main
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -10,10 +12,12 @@ import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.ProductRowBinding
 import com.raul.androidapps.lanaapplication.domain.Product
+import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 
 
 class ProductAdapter(
-    private val bindingComponent: BindingComponent
+    private val bindingComponent: BindingComponent,
+    private val resourcesManager: ResourcesManager
 ) :
     ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
@@ -27,7 +31,7 @@ class ProductAdapter(
                 false,
                 bindingComponent
             )
-        return ProductViewHolder(binding)
+        return ProductViewHolder(binding, resourcesManager)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -36,10 +40,20 @@ class ProductAdapter(
         holder.bindTo(product)
     }
 
-    class ProductViewHolder(private val binding: ProductRowBinding) :
+    class ProductViewHolder(private val binding: ProductRowBinding, private val resourcesManager: ResourcesManager) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindTo(product: Product?) {
             binding.product = product
+            binding.removeButton.apply {
+                if(product?.timesInBasket ?: 0 > 0) {
+                    isEnabled = true
+                    supportBackgroundTintList = ColorStateList.valueOf(resourcesManager.getColor(R.color.colorAccent))
+                }else{
+                    isEnabled = false
+                    supportBackgroundTintList = ColorStateList.valueOf(resourcesManager.getColor(R.color.fabDisabled))
+                }
+            }
+
             binding.executePendingBindings()
         }
     }

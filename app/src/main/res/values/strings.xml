@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LanaApplication</string>
+    <string name="products_title">Lana Products</string>
 </resources>
