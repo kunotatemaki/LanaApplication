@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.ProductRowBinding
-import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
+import com.raul.androidapps.lanaapplication.domain.Product
 
 
 class ProductAdapter(
     private val bindingComponent: BindingComponent
 ) :
-    ListAdapter<ProductEntity, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,14 +31,14 @@ class ProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product: ProductEntity? = getItem(position)
+        val product: Product? = getItem(position)
 
         holder.bindTo(product)
     }
 
     class ProductViewHolder(private val binding: ProductRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindTo(product: ProductEntity?) {
+        fun bindTo(product: Product?) {
             binding.product = product
             binding.executePendingBindings()
         }
@@ -47,16 +47,16 @@ class ProductAdapter(
 
     companion object {
         private val DIFF_CALLBACK = object :
-            DiffUtil.ItemCallback<ProductEntity>() {
+            DiffUtil.ItemCallback<Product>() {
             override fun areItemsTheSame(
-                oldProductEntity: ProductEntity,
-                newProductEntity: ProductEntity
-            ) = oldProductEntity.code == newProductEntity.code
+                oldProduct: Product,
+                newProduct: Product
+            ) = oldProduct.code == newProduct.code
 
             override fun areContentsTheSame(
-                oldProductEntity: ProductEntity,
-                newProductEntity: ProductEntity
-            ) = oldProductEntity == newProductEntity
+                oldProduct: Product,
+                newProduct: Product
+            ) = oldProduct == newProduct
         }
     }
 

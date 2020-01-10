@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.whenever
-import com.raul.androidapps.lanaapplication.domain.Products
 import com.raul.androidapps.lanaapplication.network.AppApi
+import com.raul.androidapps.lanaapplication.network.AppApi.Products
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactory
 import com.raul.androidapps.lanaapplication.persistence.PersistenceManager
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
@@ -67,9 +67,13 @@ class RepositoryTest {
     private val dbProduct1 = ProductEntity("code1", "name1", 1.0)
     private val dbProduct2 = ProductEntity("code2", "name2", 2.0)
     private val dbProduct3 = ProductEntity("code3", "name3", 3.0)
-    private val networkProduct1 = dbProduct1.toItem()
-    private val networkProduct2 = dbProduct2.toItem()
-    private val networkProduct3 = dbProduct3.toItem()
+
+    private val networkProduct1 =
+        AppApi.Item(code = dbProduct1.code, name = dbProduct1.name, price = dbProduct1.price)
+    private val networkProduct2 =
+        AppApi.Item(code = dbProduct2.code, name = dbProduct2.name, price = dbProduct2.price)
+    private val networkProduct3 =
+        AppApi.Item(code = dbProduct3.code, name = dbProduct3.name, price = dbProduct3.price)
 
     @Before
     fun setUp() {

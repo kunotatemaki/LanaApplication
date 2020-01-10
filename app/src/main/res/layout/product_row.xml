@@ -6,7 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity" />
+            type="com.raul.androidapps.lanaapplication.domain.Product" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

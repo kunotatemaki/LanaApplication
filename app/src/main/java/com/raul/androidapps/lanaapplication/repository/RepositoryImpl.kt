@@ -2,8 +2,8 @@ package com.raul.androidapps.lanaapplication.repository
 
 
 import androidx.lifecycle.LiveData
-import com.raul.androidapps.lanaapplication.domain.Item
-import com.raul.androidapps.lanaapplication.domain.Products
+import com.raul.androidapps.lanaapplication.network.AppApi.Item
+import com.raul.androidapps.lanaapplication.network.AppApi.Products
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactory
 import com.raul.androidapps.lanaapplication.persistence.PersistenceManager
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity

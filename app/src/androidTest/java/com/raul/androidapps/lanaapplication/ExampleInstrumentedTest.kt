@@ -1,15 +1,10 @@
 package com.raul.androidapps.lanaapplication
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.nhaarman.mockitokotlin2.whenever
-import com.raul.androidapps.lanaapplication.domain.NetworkResponse
 import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.ui.MainActivity
 import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

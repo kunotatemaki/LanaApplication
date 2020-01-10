@@ -1,7 +1,7 @@
 package com.raul.androidapps.lanaapplication.persistence
 
 import androidx.lifecycle.LiveData
-import com.raul.androidapps.lanaapplication.domain.Item
+import com.raul.androidapps.lanaapplication.network.AppApi.Item
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 
 interface PersistenceManager {

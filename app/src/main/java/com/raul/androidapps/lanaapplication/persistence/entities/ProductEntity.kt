@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.raul.androidapps.lanaapplication.domain.Item
+import com.raul.androidapps.lanaapplication.network.AppApi.Item
 
 @Entity(tableName = "product", indices = [(Index(value = arrayOf("code"), unique = true))])
 data class ProductEntity constructor(
@@ -16,9 +16,6 @@ data class ProductEntity constructor(
     @ColumnInfo(name = "price")
     var price: Double
 ){
-    fun toItem(): Item =
-        Item(code = code, name = name, price = price)
-
     companion object {
         fun from(item: Item): ProductEntity =
             ProductEntity(code = item.code, name = item.name, price = item.price)
