@@ -1,7 +1,6 @@
 package com.raul.androidapps.lanaapplication.ui.main
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -17,7 +16,8 @@ import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 
 class ProductAdapter(
     private val bindingComponent: BindingComponent,
-    private val resourcesManager: ResourcesManager
+    private val resourcesManager: ResourcesManager,
+    private val basketInteractions: BasketInteractions
 ) :
     ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
@@ -31,7 +31,7 @@ class ProductAdapter(
                 false,
                 bindingComponent
             )
-        return ProductViewHolder(binding, resourcesManager)
+        return ProductViewHolder(binding, resourcesManager, basketInteractions)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -40,18 +40,31 @@ class ProductAdapter(
         holder.bindTo(product)
     }
 
-    class ProductViewHolder(private val binding: ProductRowBinding, private val resourcesManager: ResourcesManager) :
+    class ProductViewHolder(
+        private val binding: ProductRowBinding,
+        private val resourcesManager: ResourcesManager,
+        private val basketInteractions: BasketInteractions
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindTo(product: Product?) {
             binding.product = product
             binding.removeButton.apply {
-                if(product?.timesInBasket ?: 0 > 0) {
-                    isEnabled = true
-                    supportBackgroundTintList = ColorStateList.valueOf(resourcesManager.getColor(R.color.colorAccent))
-                }else{
-                    isEnabled = false
-                    supportBackgroundTintList = ColorStateList.valueOf(resourcesManager.getColor(R.color.fabDisabled))
+                setOnClickListener {
+                    basketInteractions.removeProductToBasket(product?.code)
                 }
+                if (product?.timesInBasket ?: 0 > 0) {
+                    isEnabled = true
+                    supportBackgroundTintList =
+                        ColorStateList.valueOf(resourcesManager.getColor(R.color.colorAccent))
+                } else {
+                    isEnabled = false
+                    supportBackgroundTintList =
+                        ColorStateList.valueOf(resourcesManager.getColor(R.color.fabDisabled))
+                }
+            }
+
+            binding.addButton.setOnClickListener {
+                basketInteractions.addProductToBasket(product?.code)
             }
 
             binding.executePendingBindings()

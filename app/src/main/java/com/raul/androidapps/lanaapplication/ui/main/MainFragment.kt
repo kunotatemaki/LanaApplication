@@ -9,13 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
 import com.raul.androidapps.lanaapplication.vo.Result
-import timber.log.Timber
 
 
 class MainFragment : BaseFragment(), BasketInteractions {
@@ -37,7 +35,7 @@ class MainFragment : BaseFragment(), BasketInteractions {
             false,
             bindingComponent
         )
-        adapter = ProductAdapter(bindingComponent, resourcesManager)
+        adapter = ProductAdapter(bindingComponent, resourcesManager, this)
         binding.productList.apply {
             adapter = this@MainFragment.adapter
             val itemDecor = DividerItemDecoration(context, VERTICAL)
@@ -85,12 +83,12 @@ class MainFragment : BaseFragment(), BasketInteractions {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun addProductToBasket(code: String) {
-        viewModel.addProductToBasket(code)
+    override fun addProductToBasket(code: String?) {
+        code?.let { viewModel.addProductToBasket(code) }
     }
 
-    override fun removeProductToBasket(code: String) {
-        viewModel.removeProductToBasket(code)
+    override fun removeProductToBasket(code: String?) {
+        code?.let { viewModel.removeProductToBasket(code) }
     }
 
     override fun clearBasket() {
