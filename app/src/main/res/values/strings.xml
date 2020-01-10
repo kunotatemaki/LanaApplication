@@ -2,6 +2,8 @@
     <string name="app_name">LanaApplication</string>
     <string name="products_title">Lana Products</string>
     <string name="checkout">Checkout</string>
+    <string name="marketing_discount_description">2-for-1 promotion on Lana Voucher items</string>
+    <string name="cfo_discount_description">3 or more Lana T-Shirt promotion</string>
     <plurals name="numberOfItems">
         <item quantity="one">%d item in the basket</item>
         <item quantity="other">%d items in the basket</item>

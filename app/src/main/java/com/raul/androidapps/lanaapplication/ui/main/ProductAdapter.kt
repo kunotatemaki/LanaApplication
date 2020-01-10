@@ -13,6 +13,7 @@ import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.ProductRowBinding
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
+import com.raul.androidapps.lanaapplication.ui.common.BasketInteractions
 
 
 class ProductAdapter(

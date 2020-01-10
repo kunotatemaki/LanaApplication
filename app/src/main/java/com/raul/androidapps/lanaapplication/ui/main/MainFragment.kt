@@ -14,6 +14,7 @@ import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.di.injectViewModel
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutDialogFragment
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
+import com.raul.androidapps.lanaapplication.ui.common.BasketInteractions
 import com.raul.androidapps.lanaapplication.ui.customviews.CountDrawable
 import com.raul.androidapps.lanaapplication.vo.Result
 
