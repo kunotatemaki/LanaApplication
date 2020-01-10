@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:minHeight="90dp">
 
         <TextView
             android:id="@+id/name"
@@ -20,10 +21,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            app:layout_goneMarginBottom="16dp"
             android:text="@{product.name}"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@+id/items_in_basket"
             app:layout_constraintEnd_toStartOf="@id/price"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -37,9 +41,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:textColor="@color/priceColor"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/priceColor"
             app:layout_constraintEnd_toStartOf="@id/remove_button"
             app:layout_constraintStart_toEndOf="@id/name"
             app:layout_constraintTop_toTopOf="@id/name"
@@ -52,11 +56,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
+            android:textColor="@color/timesInBasketColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            android:textColor="@color/timesInBasketColor"
-            tools:text="8 items in the basket" />
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="8 items in the basket"
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
