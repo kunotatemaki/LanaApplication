@@ -2,10 +2,11 @@ package com.raul.androidapps.lanaapplication.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainActivityBinding
@@ -19,14 +20,18 @@ class MainActivity : DaggerAppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity)
-
-        val navController = findNavController(R.id.fragment_container)
-        setupActionBarWithNavController(navController)
-
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home) {
+    override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onPostCreate(savedInstanceState, persistentState)
+        supportFragmentManager.findFragmentById(R.id.fragment_container)?.findNavController()
+            ?.let { navController ->
+                setupActionBarWithNavController(navController)
+            }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             onBackPressed()
         }
         return super.onOptionsItemSelected(item)

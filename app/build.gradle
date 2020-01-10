@@ -85,10 +85,11 @@ dependencies {
 
 
     //Navigation
-    implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
-    implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
-    implementation "android.arch.navigation:navigation-fragment:$rootProject.navigationVersion"
-    implementation "android.arch.navigation:navigation-ui:$rootProject.navigationVersion"
+    def nav_version = "2.2.0-rc03"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-fragment:$nav_version"
+    implementation "android.arch.navigation:navigation-ui:$nav_version"
 
     //mockito for android
     def mockito_version = '2.28.2'
