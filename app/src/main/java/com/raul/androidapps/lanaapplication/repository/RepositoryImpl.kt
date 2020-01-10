@@ -6,6 +6,7 @@ import com.raul.androidapps.lanaapplication.network.AppApi.Item
 import com.raul.androidapps.lanaapplication.network.AppApi.Products
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactory
 import com.raul.androidapps.lanaapplication.persistence.PersistenceManager
+import com.raul.androidapps.lanaapplication.persistence.entities.BasketEntity
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 import com.raul.androidapps.lanaapplication.preferences.PreferencesConstants
 import com.raul.androidapps.lanaapplication.preferences.PreferencesManager
@@ -44,6 +45,18 @@ class RepositoryImpl @Inject constructor(
                 }
             }
         )
+
+    override fun getProductsInBasket(): LiveData<List<BasketEntity>> =
+        persistenceManager.getProductsInBasket()
+
+    override suspend fun addProductToBasket(code: String) =
+        persistenceManager.addProductToBasket(code)
+
+    override suspend fun removeProductFromBasket(code: String) =
+        persistenceManager.removeProductFromBasket(code)
+
+    override suspend fun clearBasket() =
+        persistenceManager.clearBasket()
 
     private fun getProductsFromDb(): LiveData<List<ProductEntity>> =
         persistenceManager.getProducts()

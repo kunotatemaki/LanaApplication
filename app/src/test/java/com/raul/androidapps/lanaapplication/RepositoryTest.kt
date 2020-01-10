@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.jraska.livedata.test
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.raul.androidapps.lanaapplication.network.AppApi
 import com.raul.androidapps.lanaapplication.network.AppApi.Products
@@ -28,6 +29,7 @@ import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.times
 import org.mockito.MockitoAnnotations
 import retrofit2.Response
 import java.util.concurrent.CountDownLatch
@@ -303,6 +305,42 @@ class RepositoryTest {
                     Result.loading(dbResponse),
                     Result.success(dbResponse)
                 )
+        }
+    }
+
+    @Test
+    fun `verify item added to basket`() {
+        val code = "code"
+        runBlocking(Dispatchers.IO) {
+            repository.addProductToBasket(code)
+            verify(persistenceManager, times(1)).addProductToBasket(code)
+        }
+    }
+
+    @Test
+    fun `verify item removed from basket`() {
+        val code = "code"
+        runBlocking(Dispatchers.IO) {
+            repository.removeProductFromBasket(code)
+            verify(persistenceManager, times(1)).removeProductFromBasket(code)
+        }
+    }
+
+    @Test
+    fun `verify items in basket loaded`() {
+        val code = "code"
+        runBlocking(Dispatchers.IO) {
+            repository.getProductsInBasket()
+            verify(persistenceManager, times(1)).getProductsInBasket()
+        }
+    }
+
+    @Test
+    fun `verify basket cleared`() {
+        val code = "code"
+        runBlocking(Dispatchers.IO) {
+            repository.clearBasket()
+            verify(persistenceManager, times(1)).clearBasket()
         }
     }
 
