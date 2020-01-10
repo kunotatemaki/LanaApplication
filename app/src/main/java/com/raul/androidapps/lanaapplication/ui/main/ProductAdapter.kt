@@ -1,5 +1,6 @@
 package com.raul.androidapps.lanaapplication.ui.main
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -46,8 +47,10 @@ class ProductAdapter(
         private val basketInteractions: BasketInteractions
     ) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bindTo(product: Product?) {
             binding.product = product
+            binding.price.text = "${product?.price ?: 0}€"
             binding.removeButton.apply {
                 setOnClickListener {
                     basketInteractions.removeProductToBasket(product?.code)
@@ -61,6 +64,11 @@ class ProductAdapter(
                     supportBackgroundTintList =
                         ColorStateList.valueOf(resourcesManager.getColor(R.color.fabDisabled))
                 }
+            }
+
+            product?.timesInBasket?.let {
+            val text = String.format(resourcesManager.getPlural(R.plurals.numberOfItems, it), it)
+            binding.itemsInBasket.text =text
             }
 
             binding.addButton.setOnClickListener {

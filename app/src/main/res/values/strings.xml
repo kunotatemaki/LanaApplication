@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">LanaApplication</string>
     <string name="products_title">Lana Products</string>
+    <plurals name="numberOfItems">
+        <item quantity="one">%d item in the basket</item>
+        <item quantity="other">%d items in the basket</item>
+    </plurals>
 </resources>
