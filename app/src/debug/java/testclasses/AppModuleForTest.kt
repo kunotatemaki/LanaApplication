@@ -15,6 +15,7 @@ import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.resources.ResourcesManagerImpl
 import com.raul.androidapps.lanaapplication.security.Encryption
 import com.raul.androidapps.lanaapplication.security.EncryptionImpl
+import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutViewModel
 import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
 import dagger.Module
@@ -34,6 +35,10 @@ open class AppModuleForTest {
     @Provides
     open fun providesMainViewModel(repository: Repository): MainViewModel =
         MainViewModel(repository)
+
+    @Provides
+    open fun providesCheckoutViewModel(repository: Repository): CheckoutViewModel =
+        CheckoutViewModel(repository)
 
     @Singleton
     @Provides
