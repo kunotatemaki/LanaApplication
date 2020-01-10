@@ -1,4 +1,4 @@
-package com.raul.androidapps.lanaapplication.ui.main
+package com.raul.androidapps.lanaapplication.ui.common
 
 
 interface BasketInteractions {
