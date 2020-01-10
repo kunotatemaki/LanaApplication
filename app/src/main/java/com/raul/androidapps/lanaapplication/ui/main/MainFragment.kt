@@ -6,15 +6,13 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
+import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutDialogFragment
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
 import com.raul.androidapps.lanaapplication.vo.Result
-import timber.log.Timber
-import java.lang.ref.WeakReference
 
 
 class MainFragment : BaseFragment(), BasketInteractions {
@@ -85,7 +83,7 @@ class MainFragment : BaseFragment(), BasketInteractions {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.checkout_item -> {
-                Timber.d("")
+                showCheckoutScreen()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -115,6 +113,11 @@ class MainFragment : BaseFragment(), BasketInteractions {
         viewModel.clearBasket()
     }
 
+    private fun showCheckoutScreen() {
+        activity?.supportFragmentManager?.let {
+            CheckoutDialogFragment.newInstance(30).show(it, "dialog")
+        }
+    }
 }
 
 //todo implement pull to refresh
