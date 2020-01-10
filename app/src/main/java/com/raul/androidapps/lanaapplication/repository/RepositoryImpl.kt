@@ -12,6 +12,8 @@ import com.raul.androidapps.lanaapplication.preferences.PreferencesConstants
 import com.raul.androidapps.lanaapplication.preferences.PreferencesManager
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
 import com.raul.androidapps.lanaapplication.vo.Result
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,7 +42,7 @@ class RepositoryImpl @Inject constructor(
                 saveToDb(it?.products ?: listOf())
             },
             runNetworkCall = (forceFetchInfo || shouldFetch()).also { willFetch ->
-                if(willFetch){
+                if (willFetch) {
                     storeLastFetchedTimestamp()
                 }
             }
@@ -50,13 +52,19 @@ class RepositoryImpl @Inject constructor(
         persistenceManager.getProductsInBasket()
 
     override suspend fun addProductToBasket(code: String) =
-        persistenceManager.addProductToBasket(code)
+        withContext(Dispatchers.IO) {
+            persistenceManager.addProductToBasket(code)
+        }
 
     override suspend fun removeProductFromBasket(code: String) =
-        persistenceManager.removeProductFromBasket(code)
+        withContext(Dispatchers.IO) {
+            persistenceManager.removeProductFromBasket(code)
+        }
 
     override suspend fun clearBasket() =
-        persistenceManager.clearBasket()
+        withContext(Dispatchers.IO) {
+            persistenceManager.clearBasket()
+        }
 
     private fun getProductsFromDb(): LiveData<List<ProductEntity>> =
         persistenceManager.getProducts()
@@ -67,7 +75,7 @@ class RepositoryImpl @Inject constructor(
         return rateLimiter.shouldFetch(lastFetched, timeout, timeUnit)
     }
 
-    private fun storeLastFetchedTimestamp(){
+    private fun storeLastFetchedTimestamp() {
         preferencesManager.setLongIntoPreferences(
             PreferencesConstants.LAST_FETCHED,
             System.currentTimeMillis()

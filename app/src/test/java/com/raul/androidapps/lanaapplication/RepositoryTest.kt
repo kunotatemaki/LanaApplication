@@ -121,7 +121,7 @@ class RepositoryTest {
                 latch.countDown()
             }
             response.observeForever(observer)
-            latch.await(1000, TimeUnit.SECONDS)
+            latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(2)
@@ -154,7 +154,7 @@ class RepositoryTest {
                 latch.countDown()
             }
             response.observeForever(observer)
-            latch.await(1000, TimeUnit.SECONDS)
+            latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(1)
@@ -186,7 +186,7 @@ class RepositoryTest {
                 latch.countDown()
             }
             response.observeForever(observer)
-            latch.await(1000, TimeUnit.SECONDS)
+            latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(1)
@@ -223,7 +223,7 @@ class RepositoryTest {
                 latch.countDown()
             }
             response.observeForever(observer)
-            latch.await(1000, TimeUnit.SECONDS)
+            latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(2)
@@ -260,7 +260,7 @@ class RepositoryTest {
                 latch.countDown()
             }
             response.observeForever(observer)
-            latch.await(1000, TimeUnit.SECONDS)
+            latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(2)
@@ -296,7 +296,7 @@ class RepositoryTest {
                 latch.countDown()
             }
             response.observeForever(observer)
-            latch.await(1000, TimeUnit.SECONDS)
+            latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(2)

@@ -1,18 +1,22 @@
 package com.raul.androidapps.lanaapplication.ui.main
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.persistence.entities.BasketEntity
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.vo.Result
+import kotlinx.coroutines.launch
 
 open class MainViewModel constructor(private val repository: Repository) : ViewModel() {
 
     private var products: MediatorLiveData<Result<List<Product>>> = MediatorLiveData()
     private var productsFromDb: LiveData<Result<List<ProductEntity>>>
     private var productsIbBasket: LiveData<List<BasketEntity>> = repository.getProductsInBasket()
-    private val fetchTrigger = MutableLiveData<Long>()
+
+    @VisibleForTesting
+    val fetchTrigger = MutableLiveData<Long>()
 
     init {
         productsFromDb = fetchTrigger.switchMap {
@@ -58,4 +62,21 @@ open class MainViewModel constructor(private val repository: Repository) : ViewM
     fun refresh() {
         fetchTrigger.value = System.currentTimeMillis()
     }
+
+    fun addProductToBasket(code: String) =
+        viewModelScope.launch {
+            repository.addProductToBasket(code)
+        }
+
+    fun removeProductToBasket(code: String) =
+        viewModelScope.launch {
+            repository.removeProductFromBasket(code)
+        }
+
+
+    fun clearBasket() =
+        viewModelScope.launch {
+            repository.clearBasket()
+        }
+
 }

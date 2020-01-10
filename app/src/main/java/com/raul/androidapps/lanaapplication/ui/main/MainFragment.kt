@@ -18,7 +18,7 @@ import com.raul.androidapps.lanaapplication.vo.Result
 import timber.log.Timber
 
 
-class MainFragment : BaseFragment() {
+class MainFragment : BaseFragment(), BasketInteractions {
 
     private lateinit var binding: MainFragmentBinding
 
@@ -67,9 +67,7 @@ class MainFragment : BaseFragment() {
                             it.data?.let { list -> adapter.submitList(list) }
                         }
                     }
-                    Timber.d("")
                 }
-                // use the response from server
             })
 
 
@@ -85,6 +83,18 @@ class MainFragment : BaseFragment() {
 
     private fun showError(message: String?) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun addProductToBasket(code: String) {
+        viewModel.addProductToBasket(code)
+    }
+
+    override fun removeProductToBasket(code: String) {
+        viewModel.removeProductToBasket(code)
+    }
+
+    override fun clearBasket() {
+        viewModel.clearBasket()
     }
 
 }
