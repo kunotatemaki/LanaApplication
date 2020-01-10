@@ -2,7 +2,6 @@ package com.raul.androidapps.lanaapplication.repository
 
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
 import com.raul.androidapps.lanaapplication.domain.Item
 import com.raul.androidapps.lanaapplication.domain.Products
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactory
@@ -28,7 +27,7 @@ class RepositoryImpl @Inject constructor(
     private val timeout: Int = 1
     private val timeUnit: TimeUnit = TimeUnit.MINUTES
 
-    override fun getProducts(forceFetchInfo: Boolean): LiveData<Result<PagedList<ProductEntity>>> =
+    override fun getProducts(forceFetchInfo: Boolean): LiveData<Result<List<ProductEntity>>> =
         resultLiveData(
             databaseQuery = {
                 getProductsFromDb()
@@ -46,7 +45,7 @@ class RepositoryImpl @Inject constructor(
             }
         )
 
-    private fun getProductsFromDb(): LiveData<PagedList<ProductEntity>> =
+    private fun getProductsFromDb(): LiveData<List<ProductEntity>> =
         persistenceManager.getProducts()
 
     private fun shouldFetch(): Boolean {

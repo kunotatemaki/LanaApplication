@@ -29,6 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/name"
             android:layout_marginStart="8dp"
+            android:text="@{String.valueOf(product.price)}"
             tools:text="10"/>
 
 

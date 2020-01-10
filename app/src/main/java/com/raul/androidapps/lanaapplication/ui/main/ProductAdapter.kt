@@ -3,8 +3,8 @@ package com.raul.androidapps.lanaapplication.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.BindingComponent
@@ -15,7 +15,7 @@ import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 class ProductAdapter(
     private val bindingComponent: BindingComponent
 ) :
-    PagedListAdapter<ProductEntity, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<ProductEntity, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val inflater = LayoutInflater.from(parent.context)

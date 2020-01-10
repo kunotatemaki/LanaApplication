@@ -11,6 +11,6 @@ import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 abstract class ProductDao : BaseDao<ProductEntity>() {
 
     @Query("SELECT * FROM product")
-    abstract fun getProducts(): DataSource.Factory<Int, ProductEntity>
+    abstract fun getProducts(): LiveData<List<ProductEntity>>
 
 }
