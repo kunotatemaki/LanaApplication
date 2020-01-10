@@ -10,17 +10,17 @@ import java.util.concurrent.TimeUnit
 
 
 @Throws(InterruptedException::class)
-fun <T> LiveData<T>.getAllItem(): List<T> {
-    val data = mutableListOf<T>()
+fun <T> LiveData<T>.getItem(): T {
+    val data = arrayOfNulls<Any>(1)
     val latch = CountDownLatch(1)
     val observer = object : Observer<T> {
         override fun onChanged(t: T) {
-            data.add(t)
+            data[0] = t
             latch.countDown()
             removeObserver(this)
         }
     }
     observeForever(observer)
     latch.await(2, TimeUnit.SECONDS)
-    return data
+    return data[0] as T
 }

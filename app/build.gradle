@@ -100,6 +100,7 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin_version"
     //rule for LiveData
     testImplementation 'android.arch.core:core-testing:1.1.1'
+    androidTestImplementation 'android.arch.core:core-testing:1.1.1'
     //testing navigation
     def fragment_version = "1.2.0-rc05"
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
