@@ -1,12 +1,10 @@
 package com.raul.androidapps.lanaapplication
 
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.raul.androidapps.lanaapplication.network.AppApi.Item
-import com.raul.androidapps.lanaapplication.network.AppApi
 import com.raul.androidapps.lanaapplication.persistence.PersistenceManager
 import com.raul.androidapps.lanaapplication.persistence.PersistenceManagerImpl
 import com.raul.androidapps.lanaapplication.persistence.databases.AppDatabase
@@ -24,7 +22,7 @@ import org.junit.runner.RunWith
 class LocalDBTest {
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = IsMainExecutorRule()
 
     private lateinit var database: AppDatabase
     private lateinit var persistenceManager: PersistenceManager
@@ -32,9 +30,12 @@ class LocalDBTest {
     private val dbProduct1 = ProductEntity("code1", "name1", 1.0)
     private val dbProduct2 = ProductEntity("code2", "name2", 2.0)
     private val dbProduct3 = ProductEntity("code3", "name3", 3.0)
-    private val networkProduct1 = Item(code = dbProduct1.code, name = dbProduct1.name, price = dbProduct1.price)
-    private val networkProduct2 = Item(code = dbProduct2.code, name = dbProduct2.name, price = dbProduct2.price)
-    private val networkProduct3 = Item(code = dbProduct3.code, name = dbProduct3.name, price = dbProduct3.price)
+    private val networkProduct1 =
+        Item(code = dbProduct1.code, name = dbProduct1.name, price = dbProduct1.price)
+    private val networkProduct2 =
+        Item(code = dbProduct2.code, name = dbProduct2.name, price = dbProduct2.price)
+    private val networkProduct3 =
+        Item(code = dbProduct3.code, name = dbProduct3.name, price = dbProduct3.price)
 
     @Before
     @Throws(Exception::class)
@@ -55,7 +56,6 @@ class LocalDBTest {
     fun closeDb() {
         database.close()
     }
-
 
     @Test
     @Throws(InterruptedException::class)
@@ -81,10 +81,77 @@ class LocalDBTest {
     @Throws(InterruptedException::class)
     fun testMoreThanOneProduct() {
         runBlocking {
-            persistenceManager.storeProducts(listOf(networkProduct1, networkProduct2, networkProduct3))
+            persistenceManager.storeProducts(
+                listOf(
+                    networkProduct1,
+                    networkProduct2,
+                    networkProduct3
+                )
+            )
             val products = persistenceManager.getProducts()
 
             assertTrue(products.getItem().size == 3)
+        }
+    }
+
+    @Test
+    @Throws(InterruptedException::class)
+    fun testBasketTableEmpty() {
+        runBlocking {
+            val products = persistenceManager.getProductsInBasket()
+            assertTrue(products.getItem().isEmpty())
+        }
+    }
+
+    @Test
+    @Throws(InterruptedException::class)
+    fun testAddNewProductToBasket() {
+        val code = "code"
+        runBlocking {
+            persistenceManager.addProductToBasket(code)
+            val product = persistenceManager.getProductFromBasket(code)
+            assertNotNull(product)
+            assertEquals(product?.code, code)
+            assertEquals(product?.selections, 1)
+        }
+    }
+
+    @Test
+    @Throws(InterruptedException::class)
+    fun testAddExistingProductToBasket() {
+        val code = "code"
+        runBlocking {
+            persistenceManager.addProductToBasket(code)
+            persistenceManager.addProductToBasket(code)
+            val product = persistenceManager.getProductFromBasket(code)
+            assertNotNull(product)
+            assertEquals(product?.code, code)
+            assertEquals(product?.selections, 2)
+        }
+    }
+
+    @Test
+    @Throws(InterruptedException::class)
+    fun testRemoveExistingProductFromBasket() {
+        val code = "code"
+        runBlocking {
+            persistenceManager.addProductToBasket(code)
+            persistenceManager.removeProductFromBasket(code)
+            val product = persistenceManager.getProductFromBasket(code)
+            assertNotNull(product)
+            assertEquals(product?.code, code)
+            assertEquals(product?.selections, 0)
+        }
+    }
+
+    @Test
+    @Throws(InterruptedException::class)
+    fun testRemoveNonExistingProductFromBasket() {
+        val code = "code"
+        runBlocking {
+            persistenceManager.removeProductFromBasket(code)
+            val product = persistenceManager.getProductFromBasket(code)
+            assertNull(product)
         }
     }
 

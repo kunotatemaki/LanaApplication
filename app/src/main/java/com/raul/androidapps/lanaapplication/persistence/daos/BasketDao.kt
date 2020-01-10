@@ -23,6 +23,7 @@ abstract class BasketDao : BaseDao<BasketEntity>() {
     ) { // Anything inside this method runs in a single transaction.
         val product = getProductFromBasket(code)
         if(product == null){
+            if(add < 0) return
             insert(BasketEntity(code, 1))
         } else{
             update(BasketEntity(code, product.selections + add))

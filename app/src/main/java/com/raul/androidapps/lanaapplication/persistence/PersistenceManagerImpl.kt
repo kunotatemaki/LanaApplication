@@ -3,6 +3,7 @@ package com.raul.androidapps.lanaapplication.persistence
 import androidx.lifecycle.LiveData
 import com.raul.androidapps.lanaapplication.network.AppApi.Item
 import com.raul.androidapps.lanaapplication.persistence.databases.AppDatabase
+import com.raul.androidapps.lanaapplication.persistence.entities.BasketEntity
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,6 +19,12 @@ class PersistenceManagerImpl @Inject constructor(
     override suspend fun storeProducts(products: List<Item>) {
         db.productDao().insert(products.map { ProductEntity.from(it) })
     }
+
+    override fun getProductsInBasket(): LiveData<List<BasketEntity>> =
+        db.basketDao().getProductsInBasket()
+
+    override suspend fun getProductFromBasket(code: String): BasketEntity? =
+        db.basketDao().getProductFromBasket(code)
 
     override suspend fun addProductToBasket(code: String) {
         db.basketDao().insertAndDeleteInTransaction(code, 1)
