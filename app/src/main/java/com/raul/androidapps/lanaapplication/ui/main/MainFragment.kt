@@ -7,11 +7,11 @@ import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
+import com.raul.androidapps.lanaapplication.di.injectViewModel
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutDialogFragment
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
 import com.raul.androidapps.lanaapplication.ui.customviews.CountDrawable
@@ -53,7 +53,7 @@ class MainFragment : BaseFragment(), BasketInteractions {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = injectViewModel(viewModelFactory)
         viewModel.getProductsAsObservable()
             .observe(viewLifecycleOwner, Observer {
                 it?.let {
