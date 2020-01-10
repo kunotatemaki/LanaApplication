@@ -1,5 +1,7 @@
 package com.raul.androidapps.lanaapplication.ui.main
 
+import android.content.Context
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -12,6 +14,7 @@ import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutDialogFragment
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
+import com.raul.androidapps.lanaapplication.ui.customviews.CountDrawable
 import com.raul.androidapps.lanaapplication.vo.Result
 
 
@@ -69,9 +72,9 @@ class MainFragment : BaseFragment(), BasketInteractions {
                             it.data?.let { list -> adapter.submitList(list) }
                         }
                     }
+                    activity?.invalidateOptionsMenu()
                 }
             })
-
 
     }
 
@@ -79,6 +82,29 @@ class MainFragment : BaseFragment(), BasketInteractions {
         inflater.inflate(R.menu.checkout_menu, menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        context?.let {
+            setCount(it, viewModel.getSelectedItems().toString(), menu)
+        }
+    }
+
+    private fun setCount(context: Context, count: String, menu: Menu) {
+        val menuItem: MenuItem = menu.findItem(R.id.checkout_item)
+        val icon = menuItem.icon as LayerDrawable
+        val badge: CountDrawable
+        // Reuse drawable if possible
+        val reuse =
+            icon.findDrawableByLayerId(R.id.ic_product_count)
+        badge = if (reuse != null && reuse is CountDrawable) {
+            reuse
+        } else {
+            CountDrawable(context)
+        }
+        badge.setCount(count)
+        icon.mutate()
+        icon.setDrawableByLayerId(R.id.ic_product_count, badge)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

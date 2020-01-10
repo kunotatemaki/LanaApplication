@@ -79,4 +79,7 @@ open class MainViewModel constructor(private val repository: Repository) : ViewM
             repository.clearBasket()
         }
 
+    fun getSelectedItems(): Int =
+        productsIbBasket.value?.sumBy { it.selections } ?: 0
+
 }
