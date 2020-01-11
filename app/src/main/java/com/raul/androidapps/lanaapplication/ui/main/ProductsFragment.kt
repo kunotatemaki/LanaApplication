@@ -49,6 +49,9 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
             val itemDecor = DividerItemDecoration(context, VERTICAL)
             addItemDecoration(itemDecor)
         }
+        binding.loading.setOnRefreshListener {
+            viewModel.refresh()
+        }
         return binding.root
     }
 
@@ -141,11 +144,11 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
     }
 
     private fun showLoading() {
-        binding.loading.visibility = View.VISIBLE
+        binding.loading.isRefreshing = true
     }
 
     private fun hideLoading() {
-        binding.loading.visibility = View.GONE
+        binding.loading.isRefreshing = false
     }
 
     private fun showError(message: String?) {
@@ -170,5 +173,3 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
         }
     }
 }
-
-//todo implement pull to refresh

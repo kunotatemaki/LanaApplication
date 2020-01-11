@@ -9,6 +9,11 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.ProductsFragment">
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/product_list"
             android:layout_width="0dp"
@@ -21,17 +26,7 @@
             tools:listitem="@layout/product_row"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
-
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
