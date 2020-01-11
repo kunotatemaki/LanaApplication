@@ -12,6 +12,7 @@
     <string name="cancel">Cancel</string>
     <string name="select_items">Add at least one item to the basket</string>
     <string name="accept">Accept</string>
+    <string name="thanks">Thanks for shopping in our website!</string>
     <plurals name="numberOfItems">
         <item quantity="one">%d item in the basket</item>
         <item quantity="other">%d items in the basket</item>

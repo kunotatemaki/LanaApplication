@@ -15,10 +15,12 @@ import com.raul.androidapps.lanaapplication.databinding.FragmentCheckoutDialogBi
 import com.raul.androidapps.lanaapplication.di.injectViewModel
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.ui.common.ViewModelFactory
+import com.raul.androidapps.lanaapplication.utils.ViewUtils
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
@@ -35,6 +37,9 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
 
     @Inject
     lateinit var resourcesManager: ResourcesManager
+
+    @Inject
+    lateinit var viewUtils: ViewUtils
 
     private lateinit var viewModel: CheckoutViewModel
     private lateinit var binding: FragmentCheckoutDialogBinding
@@ -63,12 +68,6 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
                 DividerItemDecoration.VERTICAL
             )
         )
-        binding.cancelAction.setOnClickListener {
-            dismiss()
-        }
-        binding.checkoutList.setOnClickListener {
-            checkout()
-        }
         return binding.root
     }
 
@@ -82,7 +81,8 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
                     binding.checkoutList.adapter = CheckoutAdapter(
                         checkout = it,
                         bindingComponent = bindingComponent,
-                        resourcesManager = resourcesManager
+                        resourcesManager = resourcesManager,
+                        checkoutBasketInteractions = this
                     )
                 }
             }
@@ -96,6 +96,18 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
 
     override fun checkout() {
         clearBasket()
+        dismiss()
+        activity?.let {
+            viewUtils.showAlertDialog(
+                activity = WeakReference(it),
+                allowCancelWhenTouchingOutside = false,
+                message = resourcesManager.getString(R.string.thanks),
+                positiveButton = resourcesManager.getString(R.string.accept)
+            )
+        }
+    }
+
+    override fun cancelCheckout() {
         dismiss()
     }
 

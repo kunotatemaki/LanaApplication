@@ -13,36 +13,11 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="@dimen/list_item_spacing_half"
-            android:paddingBottom="80dp"
+            android:paddingBottom="@dimen/list_item_spacing_half"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:context=".ui.checkout.CheckoutDialogFragment"
             tools:listitem="@layout/checkout_item"
             />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel_action"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:backgroundTint="@color/cancelButton"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/checkout_action"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/checkout_action"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/checkoutButton"
-            android:text="@string/checkout"
-            app:layout_constraintBaseline_toBaselineOf="@id/cancel_action"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cancel_action" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

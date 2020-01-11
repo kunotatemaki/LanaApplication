@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.raul.androidapps.lanaapplication.R
+import com.raul.androidapps.lanaapplication.databinding.CheckoutActionsBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutItemBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutTitleBinding
 import com.raul.androidapps.lanaapplication.domain.Checkout
@@ -70,6 +71,7 @@ class DiscountCheckoutViewHolder(
     private val binding: CheckoutItemBinding,
     resourcesManager: ResourcesManager
 ) : CheckoutViewHolder(binding, resourcesManager) {
+    @SuppressLint("SetTextI18n")
     fun bind(discount: Discount?) {
         if (discount == null) {
             binding.title = resourcesManager.getString(R.string.discount_checkout_empty)
@@ -78,6 +80,21 @@ class DiscountCheckoutViewHolder(
             binding.title = discount.description
             binding.showPrice = true
             binding.checkoutItemPrice.text = "${discount.savedMoney}€"
+        }
+    }
+
+}
+
+class ActionCheckoutViewHolder(
+    private val binding: CheckoutActionsBinding,
+    resourcesManager: ResourcesManager
+) : CheckoutViewHolder(binding, resourcesManager) {
+    fun bind(checkoutBasketInteractions: CheckoutBasketInteractions) {
+        binding.cancelAction.setOnClickListener {
+            checkoutBasketInteractions.cancelCheckout()
+        }
+        binding.checkoutAction.setOnClickListener {
+            checkoutBasketInteractions.checkout()
         }
     }
 

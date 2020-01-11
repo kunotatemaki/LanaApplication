@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.BindingComponent
+import com.raul.androidapps.lanaapplication.databinding.CheckoutActionsBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutItemBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutTitleBinding
 import com.raul.androidapps.lanaapplication.domain.Checkout
@@ -15,7 +16,8 @@ import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 class CheckoutAdapter(
     private var checkout: Checkout,
     private val resourcesManager: ResourcesManager,
-    private val bindingComponent: BindingComponent
+    private val bindingComponent: BindingComponent,
+    private val checkoutBasketInteractions: CheckoutBasketInteractions
 ) :
     RecyclerView.Adapter<CheckoutViewHolder>() {
 
@@ -24,7 +26,8 @@ class CheckoutAdapter(
         PRODUCT(1),
         DISCOUNT(2),
         SAVING(3),
-        TOTAL(4)
+        TOTAL(4),
+        ACTIONS(5)
     }
 
     override fun getItemViewType(position: Int): Int =
@@ -34,7 +37,8 @@ class CheckoutAdapter(
             1 + checkout.products.size -> CheckoutType.TITLE.value
             in 2 + checkout.products.size until (2 + checkout.products.size + getDiscountsSize()) -> CheckoutType.DISCOUNT.value
             2 + checkout.products.size + getDiscountsSize() -> CheckoutType.TOTAL.value
-            else -> CheckoutType.SAVING.value
+            3 + checkout.products.size + getDiscountsSize() -> CheckoutType.SAVING.value
+            else -> CheckoutType.ACTIONS.value
         }
 
     private fun getDiscountsSize(): Int =
@@ -87,6 +91,17 @@ class CheckoutAdapter(
                     )
                 TotalCheckoutViewHolder(binding, resourcesManager)
             }
+            CheckoutType.ACTIONS.value -> {
+                val binding =
+                    DataBindingUtil.inflate<CheckoutActionsBinding>(
+                        inflater,
+                        R.layout.checkout_actions,
+                        parent,
+                        false,
+                        bindingComponent
+                    )
+                ActionCheckoutViewHolder(binding, resourcesManager)
+            }
             else -> {
                 val binding =
                     DataBindingUtil.inflate<CheckoutTitleBinding>(
@@ -101,10 +116,10 @@ class CheckoutAdapter(
         }
     }
 
-    // productTitle + products + discountsTitle + (discounts or no_discount) + saving + pay
+    // productTitle + products + discountsTitle + (discounts or no_discount) + saving + pay + action_buttons
     override fun getItemCount(): Int {
         val discountsSize = if (checkout.discounts.isEmpty()) 1 else checkout.discounts.size
-        return 1 + checkout.products.size + 1 + discountsSize + 1 + 1
+        return 1 + checkout.products.size + 1 + discountsSize + 1 + 1 + 1
     }
 
 
@@ -138,6 +153,9 @@ class CheckoutAdapter(
             is ProductCheckoutViewHolder -> {
                 val product = checkout.products[position - 1]
                 holder.bind(product)
+            }
+            is ActionCheckoutViewHolder -> {
+                holder.bind(checkoutBasketInteractions)
             }
         }
     }
