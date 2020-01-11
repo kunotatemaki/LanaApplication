@@ -13,13 +13,12 @@ import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.ProductRowBinding
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
-import com.raul.androidapps.lanaapplication.ui.common.BasketInteractions
 
 
 class ProductAdapter(
     private val bindingComponent: BindingComponent,
     private val resourcesManager: ResourcesManager,
-    private val basketInteractions: BasketInteractions
+    private val productsBasketInteractions: ProductsBasketInteractions
 ) :
     ListAdapter<Product, ProductAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
@@ -33,7 +32,7 @@ class ProductAdapter(
                 false,
                 bindingComponent
             )
-        return ProductViewHolder(binding, resourcesManager, basketInteractions)
+        return ProductViewHolder(binding, resourcesManager, productsBasketInteractions)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -45,7 +44,7 @@ class ProductAdapter(
     class ProductViewHolder(
         private val binding: ProductRowBinding,
         private val resourcesManager: ResourcesManager,
-        private val basketInteractions: BasketInteractions
+        private val productsBasketInteractions: ProductsBasketInteractions
     ) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
@@ -54,7 +53,7 @@ class ProductAdapter(
             binding.price.text = "${product?.price ?: 0}€"
             binding.removeButton.apply {
                 setOnClickListener {
-                    basketInteractions.removeProductToBasket(product?.code)
+                    productsBasketInteractions.removeProductToBasket(product?.code)
                 }
                 if (product?.timesInBasket ?: 0 > 0) {
                     isEnabled = true
@@ -73,7 +72,7 @@ class ProductAdapter(
             }
 
             binding.addButton.setOnClickListener {
-                basketInteractions.addProductToBasket(product?.code)
+                productsBasketInteractions.addProductToBasket(product?.code)
             }
 
             binding.executePendingBindings()

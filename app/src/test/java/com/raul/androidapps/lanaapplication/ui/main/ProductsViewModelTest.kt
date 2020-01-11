@@ -18,7 +18,7 @@ import org.mockito.MockitoAnnotations
 
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
-class MainViewModelTest {
+class ProductsViewModelTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -28,13 +28,13 @@ class MainViewModelTest {
     @Mock
     private lateinit var repository: Repository
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ProductsViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(mainThreadSurrogate)
-        viewModel = MainViewModel(repository)
+        viewModel = ProductsViewModel(repository)
     }
 
     @After

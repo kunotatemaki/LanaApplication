@@ -4,7 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.ui.MainActivity
-import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
+import com.raul.androidapps.lanaapplication.ui.main.ProductsViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +24,7 @@ class ExampleInstrumentedTest {
     var rule = espressoDaggerMockRule()
 
     @Mock
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ProductsViewModel
 
     @Mock
     private lateinit var repository: Repository

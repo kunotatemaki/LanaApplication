@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.raul.androidapps.lanaapplication.di.interfaces.ViewModelKey
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutViewModel
 import com.raul.androidapps.lanaapplication.ui.common.ViewModelFactory
-import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
+import com.raul.androidapps.lanaapplication.ui.main.ProductsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -18,8 +18,8 @@ internal abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    internal abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
+    @ViewModelKey(ProductsViewModel::class)
+    internal abstract fun bindMainViewModel(productsViewModel: ProductsViewModel): ViewModel
 
     @Binds
     @IntoMap

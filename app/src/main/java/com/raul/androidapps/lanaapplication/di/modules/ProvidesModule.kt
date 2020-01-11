@@ -6,7 +6,7 @@ import com.raul.androidapps.lanaapplication.persistence.databases.AppDatabase
 import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutViewModel
-import com.raul.androidapps.lanaapplication.ui.main.MainViewModel
+import com.raul.androidapps.lanaapplication.ui.main.ProductsViewModel
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
 import dagger.Module
 import dagger.Provides
@@ -29,7 +29,7 @@ class ProvidesModule {
     ): AppDatabase = AppDatabase.getInstance(context)
 
     @Provides
-    fun provideMainViewModel(repository: Repository): MainViewModel = MainViewModel(repository)
+    fun provideMainViewModel(repository: Repository): ProductsViewModel = ProductsViewModel(repository)
 
     @Provides
     fun provideCheckoutViewModel(repository: Repository, resourcesManager: ResourcesManager): CheckoutViewModel = CheckoutViewModel(repository, resourcesManager)

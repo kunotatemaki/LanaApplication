@@ -6,7 +6,7 @@
             app:startDestination="@id/main_fragment">
 
     <fragment android:id="@+id/main_fragment"
-              android:name="com.raul.androidapps.lanaapplication.ui.main.MainFragment"
+              android:name="com.raul.androidapps.lanaapplication.ui.main.ProductsFragment"
               android:label="@string/products_title" tools:layout="@layout/main_fragment"/>
 
 </navigation>

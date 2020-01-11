@@ -9,7 +9,7 @@ import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.vo.Result
 import kotlinx.coroutines.launch
 
-open class MainViewModel constructor(private val repository: Repository) : ViewModel() {
+open class ProductsViewModel constructor(private val repository: Repository) : ViewModel() {
 
     private var products: MediatorLiveData<Result<List<Product>>> = MediatorLiveData()
     private var productsFromDb: LiveData<Result<List<ProductEntity>>>
@@ -73,11 +73,6 @@ open class MainViewModel constructor(private val repository: Repository) : ViewM
             repository.removeProductFromBasket(code)
         }
 
-
-    fun clearBasket() =
-        viewModelScope.launch {
-            repository.clearBasket()
-        }
 
     fun getSelectedItems(): Int =
         productsIbBasket.value?.sumBy { it.selections } ?: 0

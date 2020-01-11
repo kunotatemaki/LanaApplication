@@ -14,16 +14,15 @@ import com.raul.androidapps.lanaapplication.databinding.MainFragmentBinding
 import com.raul.androidapps.lanaapplication.di.injectViewModel
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutDialogFragment
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
-import com.raul.androidapps.lanaapplication.ui.common.BasketInteractions
 import com.raul.androidapps.lanaapplication.ui.customviews.CountDrawable
 import com.raul.androidapps.lanaapplication.vo.Result
 
 
-class MainFragment : BaseFragment(), BasketInteractions {
+class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
 
     private lateinit var binding: MainFragmentBinding
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ProductsViewModel
 
     private lateinit var adapter: ProductAdapter
 
@@ -45,7 +44,7 @@ class MainFragment : BaseFragment(), BasketInteractions {
         )
         adapter = ProductAdapter(bindingComponent, resourcesManager, this)
         binding.productList.apply {
-            adapter = this@MainFragment.adapter
+            adapter = this@ProductsFragment.adapter
             val itemDecor = DividerItemDecoration(context, VERTICAL)
             addItemDecoration(itemDecor)
         }
@@ -136,13 +135,9 @@ class MainFragment : BaseFragment(), BasketInteractions {
         code?.let { viewModel.removeProductToBasket(code) }
     }
 
-    override fun clearBasket() {
-        viewModel.clearBasket()
-    }
-
     private fun showCheckoutScreen() {
         activity?.supportFragmentManager?.let {
-            CheckoutDialogFragment.newInstance(30).show(it, "dialog")
+            CheckoutDialogFragment.newInstance().show(it, "checkout")
         }
     }
 }
