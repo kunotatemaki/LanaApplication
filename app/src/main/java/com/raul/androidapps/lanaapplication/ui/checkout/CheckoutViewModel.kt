@@ -42,7 +42,7 @@ open class CheckoutViewModel constructor(
         }
         //calculate discounts
         val discounts = calculateDiscounts(products = list, resourcesManager = resourcesManager)
-        checkoutInfo.value = Checkout(products = list ?: listOf(), discounts = discounts)
+        checkoutInfo.value = Checkout(products = list?.filter { it.timesInBasket > 0 } ?: listOf(), discounts = discounts.filter { it.savedMoney > 0 })
     }
 
     fun getCheckoutAsObservable(): LiveData<Checkout> =

@@ -71,12 +71,14 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
         viewModel = injectViewModel(viewModelFactory)
         viewModel.getCheckoutAsObservable().observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.checkoutList.adapter = CheckoutAdapter(
-                    checkout = it,
-                    checkoutBasketInteractions = this,
-                    bindingComponent = bindingComponent,
-                    resourcesManager = resourcesManager
-                )
+                if(it.products.isNotEmpty()) {
+                    binding.checkoutList.adapter = CheckoutAdapter(
+                        checkout = it,
+                        checkoutBasketInteractions = this,
+                        bindingComponent = bindingComponent,
+                        resourcesManager = resourcesManager
+                    )
+                }
             }
         })
     }

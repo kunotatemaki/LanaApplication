@@ -30,7 +30,7 @@ class CheckoutAdapter(
         when (position) {
             0 -> CheckoutType.TITLE.value
             in 1 until (1 + checkout.products.size) -> CheckoutType.PRODUCT.value
-            2 + checkout.products.size -> CheckoutType.TITLE.value
+            1 + checkout.products.size -> CheckoutType.TITLE.value
             in 3 + checkout.products.size until getDiscountsSize() -> CheckoutType.DISCOUNT.value
             else -> CheckoutType.TITLE.value
         }
@@ -94,7 +94,7 @@ class CheckoutAdapter(
                         title = resourcesManager.getString(R.string.products_title)
                         price = null
                     }
-                    2 + checkout.products.size -> {
+                    1 + checkout.products.size -> {
                         title = resourcesManager.getString(R.string.discounts_title)
                         price = null
                     }
