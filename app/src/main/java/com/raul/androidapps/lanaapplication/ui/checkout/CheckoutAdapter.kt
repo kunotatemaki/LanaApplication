@@ -31,7 +31,7 @@ class CheckoutAdapter(
             0 -> CheckoutType.TITLE.value
             in 1 until (1 + checkout.products.size) -> CheckoutType.PRODUCT.value
             1 + checkout.products.size -> CheckoutType.TITLE.value
-            in 3 + checkout.products.size until getDiscountsSize() -> CheckoutType.DISCOUNT.value
+            in 2 + checkout.products.size until (2 + checkout.products.size + getDiscountsSize()) -> CheckoutType.DISCOUNT.value
             else -> CheckoutType.TITLE.value
         }
 
