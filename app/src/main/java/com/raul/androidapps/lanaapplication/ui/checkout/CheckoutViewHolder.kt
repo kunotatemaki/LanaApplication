@@ -11,6 +11,7 @@ import com.raul.androidapps.lanaapplication.domain.Checkout
 import com.raul.androidapps.lanaapplication.domain.Discount
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
+import com.raul.androidapps.lanaapplication.utils.formatDecimalValue
 
 
 sealed class CheckoutViewHolder(
@@ -37,7 +38,8 @@ class SavingCheckoutViewHolder(
     fun bind(title: String, checkout: Checkout) {
         binding.title = title
         binding.showPrice = true
-        binding.checkoutTitlePrice.text = "${checkout.discounts.sumByDouble { it.savedMoney }}€"
+        val price = formatDecimalValue(checkout.discounts.sumByDouble { it.savedMoney })
+        binding.checkoutTitlePrice.text = "$price€"
     }
 }
 
@@ -49,8 +51,10 @@ class TotalCheckoutViewHolder(
     fun bind(title: String, checkout: Checkout) {
         binding.title = title
         binding.showPrice = true
-        binding.checkoutTitlePrice.text =
-            "${checkout.products.sumByDouble { it.price * it.timesInBasket } - checkout.discounts.sumByDouble { it.savedMoney }}€"
+        val price = formatDecimalValue(
+            checkout.products.sumByDouble { it.price * it.timesInBasket } - checkout.discounts.sumByDouble { it.savedMoney }
+        )
+        binding.checkoutTitlePrice.text = "$price€"
     }
 }
 
@@ -63,7 +67,7 @@ class ProductCheckoutViewHolder(
         val title = resourcesManager.getString(R.string.product_checkout)
         binding.title = String.format(title, product.timesInBasket, product.name)
         binding.showPrice = true
-        binding.checkoutItemPrice.text = "${product.price * product.timesInBasket}€"
+        binding.checkoutItemPrice.text = "${formatDecimalValue(product.price * product.timesInBasket)}€"
     }
 }
 
@@ -79,7 +83,7 @@ class DiscountCheckoutViewHolder(
         } else {
             binding.title = discount.description
             binding.showPrice = true
-            binding.checkoutItemPrice.text = "${discount.savedMoney}€"
+            binding.checkoutItemPrice.text = "${formatDecimalValue(discount.savedMoney)}€"
         }
     }
 

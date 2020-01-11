@@ -13,6 +13,7 @@ import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.ProductRowBinding
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
+import com.raul.androidapps.lanaapplication.utils.formatDecimalValue
 
 
 class ProductAdapter(
@@ -50,7 +51,7 @@ class ProductAdapter(
         @SuppressLint("SetTextI18n")
         fun bindTo(product: Product?) {
             binding.product = product
-            binding.price.text = "${product?.price ?: 0}€"
+            binding.price.text = "${formatDecimalValue(product?.price)}€"
             binding.removeButton.apply {
                 setOnClickListener {
                     productsBasketInteractions.removeProductToBasket(product?.code)
