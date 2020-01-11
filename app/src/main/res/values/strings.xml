@@ -7,8 +7,8 @@
     <string name="cfo_discount_description">3 or more Lana T-Shirt promotion</string>
     <string name="product_checkout">%d x %s</string>
     <string name="discount_checkout_empty">No discounts applied</string>
-    <string name="money_saved">Money saved</string>
-    <string name="money_to_pay">Money to pay</string>
+    <string name="money_saved">You save</string>
+    <string name="money_to_pay">You pay</string>
     <plurals name="numberOfItems">
         <item quantity="one">%d item in the basket</item>
         <item quantity="other">%d items in the basket</item>

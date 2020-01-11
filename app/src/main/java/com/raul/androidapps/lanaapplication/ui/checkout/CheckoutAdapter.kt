@@ -23,7 +23,9 @@ class CheckoutAdapter(
     enum class CheckoutType(val value: Int) {
         TITLE(0),
         PRODUCT(1),
-        DISCOUNT(2)
+        DISCOUNT(2),
+        SAVING(3),
+        TOTAL(4)
     }
 
     override fun getItemViewType(position: Int): Int =
@@ -32,7 +34,8 @@ class CheckoutAdapter(
             in 1 until (1 + checkout.products.size) -> CheckoutType.PRODUCT.value
             1 + checkout.products.size -> CheckoutType.TITLE.value
             in 2 + checkout.products.size until (2 + checkout.products.size + getDiscountsSize()) -> CheckoutType.DISCOUNT.value
-            else -> CheckoutType.TITLE.value
+            2 + checkout.products.size + getDiscountsSize() -> CheckoutType.TOTAL.value
+            else -> CheckoutType.SAVING.value
         }
 
     private fun getDiscountsSize(): Int =
@@ -63,6 +66,28 @@ class CheckoutAdapter(
                     )
                 DiscountCheckoutViewHolder(binding, resourcesManager)
             }
+            CheckoutType.SAVING.value -> {
+                val binding =
+                    DataBindingUtil.inflate<CheckoutTitleBinding>(
+                        inflater,
+                        R.layout.checkout_title,
+                        parent,
+                        false,
+                        bindingComponent
+                    )
+                SavingCheckoutViewHolder(binding, resourcesManager)
+            }
+            CheckoutType.TOTAL.value -> {
+                val binding =
+                    DataBindingUtil.inflate<CheckoutTitleBinding>(
+                        inflater,
+                        R.layout.checkout_title,
+                        parent,
+                        false,
+                        bindingComponent
+                    )
+                TotalCheckoutViewHolder(binding, resourcesManager)
+            }
             else -> {
                 val binding =
                     DataBindingUtil.inflate<CheckoutTitleBinding>(
@@ -87,27 +112,21 @@ class CheckoutAdapter(
     override fun onBindViewHolder(holder: CheckoutViewHolder, position: Int) {
         when (holder) {
             is TitleCheckoutViewHolder -> {
-                val title: String
-                val price: Double?
-                when (position) {
+                val title = when (position) {
                     0 -> {
-                        title = resourcesManager.getString(R.string.products_title)
-                        price = null
-                    }
-                    1 + checkout.products.size -> {
-                        title = resourcesManager.getString(R.string.discounts_title)
-                        price = null
-                    }
-                    itemCount - 2 -> {
-                        title = resourcesManager.getString(R.string.money_saved)
-                        price = 10.0
+                        resourcesManager.getString(R.string.products_title)
                     }
                     else -> {
-                        title = resourcesManager.getString(R.string.money_to_pay)
-                        price = 20.0
+                        resourcesManager.getString(R.string.discounts_title)
                     }
                 }
-                holder.bind(title, price)
+                holder.bind(title)
+            }
+            is SavingCheckoutViewHolder -> {
+                holder.bind(resourcesManager.getString(R.string.money_saved), checkout)
+            }
+            is TotalCheckoutViewHolder -> {
+                holder.bind(resourcesManager.getString(R.string.money_to_pay), checkout)
             }
             is DiscountCheckoutViewHolder -> {
                 if (checkout.discounts.isEmpty()) {

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.CheckoutItemBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutTitleBinding
+import com.raul.androidapps.lanaapplication.domain.Checkout
 import com.raul.androidapps.lanaapplication.domain.Discount
 import com.raul.androidapps.lanaapplication.domain.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
@@ -21,10 +22,34 @@ class TitleCheckoutViewHolder(
     resourcesManager: ResourcesManager
 ) : CheckoutViewHolder(binding, resourcesManager) {
     @SuppressLint("SetTextI18n")
-    fun bind(title: String, price: Double?) {
+    fun bind(title: String) {
         binding.title = title
-        binding.showPrice = price != null
-        binding.checkoutTitlePrice.text = "${price.toString()}€"
+        binding.showPrice = false
+    }
+}
+
+class SavingCheckoutViewHolder(
+    private val binding: CheckoutTitleBinding,
+    resourcesManager: ResourcesManager
+) : CheckoutViewHolder(binding, resourcesManager) {
+    @SuppressLint("SetTextI18n")
+    fun bind(title: String, checkout: Checkout) {
+        binding.title = title
+        binding.showPrice = true
+        binding.checkoutTitlePrice.text = "${checkout.discounts.sumByDouble { it.savedMoney }}€"
+    }
+}
+
+class TotalCheckoutViewHolder(
+    private val binding: CheckoutTitleBinding,
+    resourcesManager: ResourcesManager
+) : CheckoutViewHolder(binding, resourcesManager) {
+    @SuppressLint("SetTextI18n")
+    fun bind(title: String, checkout: Checkout) {
+        binding.title = title
+        binding.showPrice = true
+        binding.checkoutTitlePrice.text =
+            "${checkout.products.sumByDouble { it.price * it.timesInBasket } - checkout.discounts.sumByDouble { it.savedMoney }}€"
     }
 }
 
