@@ -11,9 +11,6 @@ fun String.normalizedString(): String {
     return normalized.replace("[^\\p{ASCII}]".toRegex(), "").trim { it <= ' ' }.toLowerCase()
 }
 
-fun <X, Y> LiveData<X>.switchMap(func: (X) -> LiveData<Y>)
-        = Transformations.switchMap(this, func)
-
 fun <T> WeakReference<T>.safe(body : T.() -> Unit) {
     this.get()?.body()
 }

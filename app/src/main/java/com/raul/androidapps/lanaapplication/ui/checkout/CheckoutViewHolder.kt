@@ -80,4 +80,5 @@ class DiscountCheckoutViewHolder(
             binding.checkoutItemPrice.text = "${discount.savedMoney}€"
         }
     }
+
 }

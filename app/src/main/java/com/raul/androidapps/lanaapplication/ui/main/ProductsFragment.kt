@@ -16,6 +16,7 @@ import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutDialogFragment
 import com.raul.androidapps.lanaapplication.ui.common.BaseFragment
 import com.raul.androidapps.lanaapplication.ui.customviews.CountDrawable
 import com.raul.androidapps.lanaapplication.vo.Result
+import java.lang.ref.WeakReference
 
 
 class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
@@ -85,7 +86,7 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         context?.let {
-            setCount(it, viewModel.getSelectedItems().toString(), menu)
+            setCount(it, viewModel.getNumberOfSelectedItems().toString(), menu)
         }
     }
 
@@ -109,7 +110,18 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.checkout_item -> {
-                showCheckoutScreen()
+                if(viewModel.getNumberOfSelectedItems() > 0) {
+                    showCheckoutScreen()
+                } else {
+                    activity?.let {
+                        viewUtils.showAlertDialog(
+                            activity = WeakReference(it),
+                            allowCancelWhenTouchingOutside = false,
+                            message = resourcesManager.getString(R.string.select_items),
+                            positiveButton = resourcesManager.getString(R.string.accept)
+                        )
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -135,6 +147,10 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
         code?.let { viewModel.removeProductToBasket(code) }
     }
 
+    override fun clearBasket() {
+        viewModel.clearBasket()
+    }
+
     private fun showCheckoutScreen() {
         activity?.supportFragmentManager?.let {
             CheckoutDialogFragment.newInstance().show(it, "checkout")
@@ -143,3 +159,5 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
 }
 
 //todo implement pull to refresh
+//todo dialog when click checkbox without selections
+//todo dialog to confirm delete

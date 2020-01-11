@@ -63,18 +63,24 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
                 DividerItemDecoration.VERTICAL
             )
         )
+        binding.cancelAction.setOnClickListener {
+            dismiss()
+        }
+        binding.checkoutList.setOnClickListener {
+            checkout()
+        }
         return binding.root
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = injectViewModel(viewModelFactory)
         viewModel.getCheckoutAsObservable().observe(viewLifecycleOwner, Observer {
             it?.let {
-                if(it.products.isNotEmpty()) {
+                if (it.products.isNotEmpty()) {
                     binding.checkoutList.adapter = CheckoutAdapter(
                         checkout = it,
-                        checkoutBasketInteractions = this,
                         bindingComponent = bindingComponent,
                         resourcesManager = resourcesManager
                     )
@@ -83,8 +89,14 @@ class CheckoutDialogFragment : BottomSheetDialogFragment(), HasAndroidInjector,
         })
     }
 
+
     override fun clearBasket() {
         viewModel.clearBasket()
+    }
+
+    override fun checkout() {
+        clearBasket()
+        dismiss()
     }
 
     companion object {

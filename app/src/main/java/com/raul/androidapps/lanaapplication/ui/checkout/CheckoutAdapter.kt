@@ -14,7 +14,6 @@ import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 
 class CheckoutAdapter(
     private var checkout: Checkout,
-    private val checkoutBasketInteractions: CheckoutBasketInteractions,
     private val resourcesManager: ResourcesManager,
     private val bindingComponent: BindingComponent
 ) :

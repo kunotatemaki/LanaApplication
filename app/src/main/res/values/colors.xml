@@ -7,4 +7,6 @@
     <color name="timesInBasketColor">#0142C5</color>
     <color name="priceColor">#B3013D</color>
     <color name="badge_background_color">#F4E136</color>
+    <color name="checkoutButton">#2196F3</color>
+    <color name="cancelButton">#B6003E</color>
 </resources>

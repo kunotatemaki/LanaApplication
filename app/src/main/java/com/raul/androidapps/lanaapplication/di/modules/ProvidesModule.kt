@@ -8,6 +8,7 @@ import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutViewModel
 import com.raul.androidapps.lanaapplication.ui.main.ProductsViewModel
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
+import com.raul.androidapps.lanaapplication.utils.ViewUtils
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -34,5 +35,7 @@ class ProvidesModule {
     @Provides
     fun provideCheckoutViewModel(repository: Repository, resourcesManager: ResourcesManager): CheckoutViewModel = CheckoutViewModel(repository, resourcesManager)
 
+    @Provides
+    fun providesViewUtils(): ViewUtils = ViewUtils()
 
 }

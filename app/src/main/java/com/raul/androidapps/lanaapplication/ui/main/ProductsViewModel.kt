@@ -73,8 +73,12 @@ open class ProductsViewModel constructor(private val repository: Repository) : V
             repository.removeProductFromBasket(code)
         }
 
+    fun clearBasket() =
+        viewModelScope.launch {
+            repository.clearBasket()
+        }
 
-    fun getSelectedItems(): Int =
+    fun getNumberOfSelectedItems(): Int =
         productsIbBasket.value?.sumBy { it.selections } ?: 0
 
 }

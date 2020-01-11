@@ -18,6 +18,7 @@ import com.raul.androidapps.lanaapplication.security.EncryptionImpl
 import com.raul.androidapps.lanaapplication.ui.checkout.CheckoutViewModel
 import com.raul.androidapps.lanaapplication.ui.main.ProductsViewModel
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
+import com.raul.androidapps.lanaapplication.utils.ViewUtils
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -77,4 +78,7 @@ open class AppModuleForTest {
     fun provideDb(
         context: Context
     ): AppDatabase = AppDatabase.getInstance(context)
+
+    @Provides
+    fun providesViewUtils(): ViewUtils = ViewUtils()
 }
