@@ -6,4 +6,8 @@
         app:showAsAction="always"
         android:title="@string/checkout"
         android:icon="@drawable/actionbar_cart"/>
+    <item
+        android:id="@+id/delete_basket_item"
+        app:showAsAction="never"
+        android:title="@string/delete_basket"/>
 </menu>

@@ -110,7 +110,7 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.checkout_item -> {
-                if(viewModel.getNumberOfSelectedItems() > 0) {
+                if (viewModel.getNumberOfSelectedItems() > 0) {
                     showCheckoutScreen()
                 } else {
                     activity?.let {
@@ -121,6 +121,19 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
                             positiveButton = resourcesManager.getString(R.string.accept)
                         )
                     }
+                }
+            }
+            R.id.delete_basket_item -> {
+                activity?.let {
+                    viewUtils.showAlertDialog(
+                        activity = WeakReference(it),
+                        allowCancelWhenTouchingOutside = false,
+                        title = resourcesManager.getString(R.string.warning),
+                        message = resourcesManager.getString(R.string.delete_basket_confirmation),
+                        positiveButton = resourcesManager.getString(R.string.accept),
+                        callbackPositive = { viewModel.clearBasket() },
+                        negativeButton = resourcesManager.getString(R.string.cancel)
+                    )
                 }
             }
         }
@@ -159,5 +172,3 @@ class ProductsFragment : BaseFragment(), ProductsBasketInteractions {
 }
 
 //todo implement pull to refresh
-//todo dialog when click checkbox without selections
-//todo dialog to confirm delete

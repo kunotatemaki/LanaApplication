@@ -13,6 +13,9 @@
     <string name="select_items">Add at least one item to the basket</string>
     <string name="accept">Accept</string>
     <string name="thanks">Thanks for shopping in our website!</string>
+    <string name="delete_basket">Clear Basket</string>
+    <string name="warning">Warning</string>
+    <string name="delete_basket_confirmation">Do you want to clear your baske? This operation cannot be undone</string>
     <plurals name="numberOfItems">
         <item quantity="one">%d item in the basket</item>
         <item quantity="other">%d items in the basket</item>
