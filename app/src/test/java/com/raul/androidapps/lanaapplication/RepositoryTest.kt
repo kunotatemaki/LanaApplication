@@ -114,7 +114,7 @@ class RepositoryTest {
                 .thenReturn(
                     true
                 )
-            val response = repository.getProducts()
+            val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(2)
             val observer = Observer<Result<List<ProductEntity>>> {
@@ -147,7 +147,7 @@ class RepositoryTest {
                 .thenReturn(
                     false
                 )
-            val response = repository.getProducts()
+            val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(1)
             val observer = Observer<Result<List<ProductEntity>>> {
@@ -179,7 +179,7 @@ class RepositoryTest {
                 .thenReturn(
                     false
                 )
-            val response = repository.getProducts()
+            val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(1)
             val observer = Observer<Result<List<ProductEntity>>> {
@@ -216,7 +216,7 @@ class RepositoryTest {
                 .thenReturn(
                     true
                 )
-            val response = repository.getProducts()
+            val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(2)
             val observer = Observer<Result<List<ProductEntity>>> {
@@ -253,7 +253,7 @@ class RepositoryTest {
                 .thenReturn(
                     true
                 )
-            val response = repository.getProducts()
+            val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(2)
             val observer = Observer<Result<List<ProductEntity>>> {

@@ -2,6 +2,10 @@ package com.raul.androidapps.lanaapplication.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jraska.livedata.test
+import com.raul.androidapps.lanaapplication.domain.usecase.AddProductToBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.ClearBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.GetProductsUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.RemoveProductFromBasketUseCase
 import com.raul.androidapps.lanaapplication.repository.Repository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
@@ -26,7 +30,16 @@ class ProductsViewModelTest {
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
     @Mock
-    private lateinit var repository: Repository
+    private lateinit var getProductsUseCase: GetProductsUseCase
+
+    @Mock
+    private lateinit var addProductToBasketUseCase: AddProductToBasketUseCase
+
+    @Mock
+    private lateinit var removeProductFromBasketUseCase: RemoveProductFromBasketUseCase
+
+    @Mock
+    private lateinit var clearBasketUseCase: ClearBasketUseCase
 
     private lateinit var viewModel: ProductsViewModel
 
@@ -34,7 +47,7 @@ class ProductsViewModelTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(mainThreadSurrogate)
-        viewModel = ProductsViewModel(repository)
+        viewModel = ProductsViewModel(getProductsUseCase, addProductToBasketUseCase, removeProductFromBasketUseCase, clearBasketUseCase)
     }
 
     @After
@@ -61,7 +74,7 @@ class ProductsViewModelTest {
     fun addProductToBasket() {
         runBlocking(Dispatchers.IO) {
             viewModel.addProductToBasket("code").join()
-            verify(repository, times(1)).addProductToBasket("code")
+            verify(addProductToBasketUseCase, times(1)).addProductToBasket("code")
 
         }
     }
@@ -70,7 +83,7 @@ class ProductsViewModelTest {
     fun removeProductToBasket() {
         runBlocking(Dispatchers.IO) {
             viewModel.removeProductToBasket("code").join()
-            verify(repository, times(1)).removeProductFromBasket("code")
+            verify(removeProductFromBasketUseCase, times(1)).removeProductFromBasket("code")
 
         }
     }
@@ -79,7 +92,7 @@ class ProductsViewModelTest {
     fun clearBasket() {
         runBlocking(Dispatchers.IO) {
             viewModel.clearBasket().join()
-            verify(repository, times(1)).clearBasket()
+            verify(clearBasketUseCase, times(1)).clearBasket()
 
         }
 

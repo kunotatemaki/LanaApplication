@@ -2,6 +2,7 @@ package com.raul.androidapps.lanaapplication.domain
 
 import com.nhaarman.mockitokotlin2.whenever
 import com.raul.androidapps.lanaapplication.R
+import com.raul.androidapps.lanaapplication.domain.model.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.utils.cfoDiscount
 import com.raul.androidapps.lanaapplication.utils.marketingDiscount
@@ -15,7 +16,7 @@ import org.mockito.MockitoAnnotations
 
 class DiscountsHelperKtTest {
 
-    private val pen = Product("PEN", "Lana Voucher", 5.0)
+    private val pen = Product("VOUCHER", "Lana Voucher", 5.0)
     private val tshirt = Product("TSHIRT", "Lana T-Shirt", 20.0)
     private val mug = Product("MUG", "Lana Coffee Mug", 7.5)
     private val products = listOf(pen, tshirt, mug)
@@ -41,7 +42,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountOdd() {
-        products.first { it.code == "PEN" }.timesInBasket = 5
+        products.first { it.code == "VOUCHER" }.timesInBasket = 5
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -50,7 +51,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountEven() {
-        products.first { it.code == "PEN" }.timesInBasket = 4
+        products.first { it.code == "VOUCHER" }.timesInBasket = 4
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -59,7 +60,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountLessThan2() {
-        products.first { it.code == "PEN" }.timesInBasket = 1
+        products.first { it.code == "VOUCHER" }.timesInBasket = 1
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
@@ -68,7 +69,7 @@ class DiscountsHelperKtTest {
 
     @Test
     fun marketingDiscountEmptyList() {
-        products.first { it.code == "PEN" }.timesInBasket = 0
+        products.first { it.code == "VOUCHER" }.timesInBasket = 0
         val discount = marketingDiscount(products, resourcesManager)
         assertNotNull(discount)
         assertEquals(discount.description, marketingDescription)
