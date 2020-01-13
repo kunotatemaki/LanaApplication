@@ -1,10 +1,14 @@
 package com.raul.androidapps.lanaapplication
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import com.nhaarman.mockitokotlin2.whenever
 import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.ui.MainActivity
 import com.raul.androidapps.lanaapplication.ui.main.ProductsViewModel
+import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,14 +40,13 @@ class ExampleInstrumentedTest {
 
     @Test
     fun useAppContext() {
-//        runBlocking {
-//            whenever(repository.getProducts())
-//                .thenReturn(NetworkResponse.Success(Any()))
-//            //both repo and viewmodel mocks will be injected by dagger
-//
-//            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-//            assertEquals("com.raul.androidapps.lanaapplication", appContext.packageName)
-//        }
+        runBlocking {
+
+            //both repo and viewmodel mocks will be injected by dagger
+
+            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+            assertEquals("com.raul.androidapps.lanaapplication", appContext.packageName)
+        }
 
     }
 }
