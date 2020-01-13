@@ -7,7 +7,7 @@
 
         <variable
             name="product"
-            type="com.raul.androidapps.lanaapplication.domain.Product" />
+            type="com.raul.androidapps.lanaapplication.domain.model.Product" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

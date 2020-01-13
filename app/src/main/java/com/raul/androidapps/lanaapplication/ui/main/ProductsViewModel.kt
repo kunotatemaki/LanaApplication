@@ -2,18 +2,27 @@ package com.raul.androidapps.lanaapplication.ui.main
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
-import com.raul.androidapps.lanaapplication.domain.Product
+import com.raul.androidapps.lanaapplication.domain.model.Product
+import com.raul.androidapps.lanaapplication.domain.model.mapper.EntityToProduct
+import com.raul.androidapps.lanaapplication.domain.usecase.AddProductToBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.ClearBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.GetProductsUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.RemoveProductFromBasketUseCase
 import com.raul.androidapps.lanaapplication.persistence.entities.BasketEntity
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
-import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.vo.Result
 import kotlinx.coroutines.launch
 
-open class ProductsViewModel constructor(private val repository: Repository) : ViewModel() {
+open class ProductsViewModel constructor(
+    private val getProductsUseCase: GetProductsUseCase,
+    private val addProductToBasketUseCase: AddProductToBasketUseCase,
+    private val removeProductFromBasketUseCase: RemoveProductFromBasketUseCase,
+    private val clearBasketUseCase: ClearBasketUseCase
+) : ViewModel() {
 
     private var products: MediatorLiveData<Result<List<Product>>> = MediatorLiveData()
     private var productsFromDb: LiveData<Result<List<ProductEntity>>>
-    private var productsIbBasket: LiveData<List<BasketEntity>> = repository.getProductsInBasket()
+    private var productsIbBasket: LiveData<List<BasketEntity>> = getProductsUseCase.getProductsInBasket()
 
     @VisibleForTesting
     val fetchTrigger = MutableLiveData<Long>()
@@ -21,9 +30,9 @@ open class ProductsViewModel constructor(private val repository: Repository) : V
     init {
         productsFromDb = fetchTrigger.switchMap {
             if (it == null || it == 0L) {
-                repository.getProducts()
+                getProductsUseCase.getProducts()
             } else {
-                repository.getProducts(true)
+                getProductsUseCase.getProducts(true)
             }
         }
         products.apply {
@@ -38,7 +47,7 @@ open class ProductsViewModel constructor(private val repository: Repository) : V
     }
 
     private fun getProductsWithBasketInfo() {
-        val list = productsFromDb.value?.data?.map { product -> Product.from(product) }
+        val list = productsFromDb.value?.data?.map { product -> EntityToProduct.map(product) }
         //add info about how many times the item has been added to the basket
         list?.forEach { product ->
             product.timesInBasket =
@@ -65,17 +74,17 @@ open class ProductsViewModel constructor(private val repository: Repository) : V
 
     fun addProductToBasket(code: String) =
         viewModelScope.launch {
-            repository.addProductToBasket(code)
+            addProductToBasketUseCase.addProductToBasket(code)
         }
 
     fun removeProductToBasket(code: String) =
         viewModelScope.launch {
-            repository.removeProductFromBasket(code)
+            removeProductFromBasketUseCase.removeProductFromBasket(code)
         }
 
     fun clearBasket() =
         viewModelScope.launch {
-            repository.clearBasket()
+            clearBasketUseCase.clearBasket()
         }
 
     fun getNumberOfSelectedItems(): Int =

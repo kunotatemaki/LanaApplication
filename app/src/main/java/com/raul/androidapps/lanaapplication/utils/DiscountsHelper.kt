@@ -1,8 +1,8 @@
 package com.raul.androidapps.lanaapplication.utils
 
 import com.raul.androidapps.lanaapplication.R
-import com.raul.androidapps.lanaapplication.domain.Discount
-import com.raul.androidapps.lanaapplication.domain.Product
+import com.raul.androidapps.lanaapplication.domain.model.Discount
+import com.raul.androidapps.lanaapplication.domain.model.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 
 fun calculateDiscounts(

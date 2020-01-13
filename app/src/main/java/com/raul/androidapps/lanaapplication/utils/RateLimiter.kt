@@ -1,7 +1,6 @@
 package com.raul.androidapps.lanaapplication.utils
 
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class RateLimiter() {
 
@@ -13,7 +12,7 @@ class RateLimiter() {
      */
     @Synchronized
     fun shouldFetch(lastFetched: Long, timeout: Int, timeUnit: TimeUnit): Boolean {
-    val timeoutFormatted: Long = timeUnit.toMillis(timeout.toLong())
+        val timeoutFormatted: Long = timeUnit.toMillis(timeout.toLong())
         val now = now()
         if (lastFetched == 0L) {
             return true

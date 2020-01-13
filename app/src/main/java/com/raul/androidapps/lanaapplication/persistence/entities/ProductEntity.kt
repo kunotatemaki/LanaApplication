@@ -15,10 +15,5 @@ data class ProductEntity constructor(
     var name: String,
     @ColumnInfo(name = "price")
     var price: Double
-){
-    companion object {
-        fun from(item: Item): ProductEntity =
-            ProductEntity(code = item.code, name = item.name, price = item.price)
-    }
-}
+)
 

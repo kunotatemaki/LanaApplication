@@ -9,7 +9,7 @@ import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.CheckoutActionsBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutItemBinding
 import com.raul.androidapps.lanaapplication.databinding.CheckoutTitleBinding
-import com.raul.androidapps.lanaapplication.domain.Checkout
+import com.raul.androidapps.lanaapplication.domain.model.Checkout
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 
 

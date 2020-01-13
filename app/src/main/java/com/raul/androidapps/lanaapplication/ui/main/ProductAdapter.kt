@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.databinding.BindingComponent
 import com.raul.androidapps.lanaapplication.databinding.ProductRowBinding
-import com.raul.androidapps.lanaapplication.domain.Product
+import com.raul.androidapps.lanaapplication.domain.model.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.utils.formatDecimalValue
 

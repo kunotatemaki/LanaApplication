@@ -1,23 +1,28 @@
 package com.raul.androidapps.lanaapplication.ui.checkout
 
 import androidx.lifecycle.*
-import com.raul.androidapps.lanaapplication.domain.Checkout
-import com.raul.androidapps.lanaapplication.domain.Product
+import com.raul.androidapps.lanaapplication.domain.model.Checkout
+import com.raul.androidapps.lanaapplication.domain.model.Product
+import com.raul.androidapps.lanaapplication.domain.model.mapper.EntityToProduct
+import com.raul.androidapps.lanaapplication.domain.usecase.ClearBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.GetProductsUseCase
 import com.raul.androidapps.lanaapplication.persistence.entities.BasketEntity
 import com.raul.androidapps.lanaapplication.persistence.entities.ProductEntity
-import com.raul.androidapps.lanaapplication.repository.Repository
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.utils.calculateDiscounts
 import kotlinx.coroutines.launch
 
 open class CheckoutViewModel constructor(
-    private val repository: Repository,
+    getProductsUseCase: GetProductsUseCase,
+    private val clearBasketUseCase: ClearBasketUseCase,
     private val resourcesManager: ResourcesManager
 ) : ViewModel() {
 
     private var checkoutInfo: MediatorLiveData<Checkout> = MediatorLiveData()
-    private var productsFromDb: LiveData<List<ProductEntity>> = repository.getProductsFromCache()
-    private var productsIbBasket: LiveData<List<BasketEntity>> = repository.getProductsInBasket()
+    private var productsFromDb: LiveData<List<ProductEntity>> =
+        getProductsUseCase.getProductsFromCache()
+    private var productsIbBasket: LiveData<List<BasketEntity>> =
+        getProductsUseCase.getProductsInBasket()
 
 
     init {
@@ -33,7 +38,7 @@ open class CheckoutViewModel constructor(
     }
 
     private fun getCheckoutInfo() {
-        val list = productsFromDb.value?.map { product -> Product.from(product) }
+        val list = productsFromDb.value?.map { product -> EntityToProduct.map(product) }
         //add info about how many times the item has been added to the basket
         list?.forEach { product ->
             product.timesInBasket =
@@ -42,7 +47,8 @@ open class CheckoutViewModel constructor(
         }
         //calculate discounts
         val discounts = calculateDiscounts(products = list, resourcesManager = resourcesManager)
-        checkoutInfo.value = Checkout(products = list?.filter { it.timesInBasket > 0 } ?: listOf(), discounts = discounts.filter { it.savedMoney > 0 })
+        checkoutInfo.value = Checkout(products = list?.filter { it.timesInBasket > 0 } ?: listOf(),
+            discounts = discounts.filter { it.savedMoney > 0 })
     }
 
     fun getCheckoutAsObservable(): LiveData<Checkout> =
@@ -51,7 +57,7 @@ open class CheckoutViewModel constructor(
 
     fun clearBasket() =
         viewModelScope.launch {
-            repository.clearBasket()
+            clearBasketUseCase.clearBasket()
         }
 
 }

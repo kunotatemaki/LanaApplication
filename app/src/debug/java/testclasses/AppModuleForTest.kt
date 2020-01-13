@@ -2,6 +2,10 @@ package testclasses
 
 import android.content.Context
 import com.raul.androidapps.lanaapplication.MyApplication
+import com.raul.androidapps.lanaapplication.domain.usecase.AddProductToBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.ClearBasketUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.GetProductsUseCase
+import com.raul.androidapps.lanaapplication.domain.usecase.RemoveProductFromBasketUseCase
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactory
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactoryImpl
 import com.raul.androidapps.lanaapplication.persistence.PersistenceManager
@@ -34,12 +38,26 @@ open class AppModuleForTest {
         application.applicationContext
 
     @Provides
-    open fun providesMainViewModel(repository: Repository): ProductsViewModel =
-        ProductsViewModel(repository)
+    open fun providesMainViewModel(
+        getProductsUseCase: GetProductsUseCase,
+        addProductToBasketUseCase: AddProductToBasketUseCase,
+        removeProductFromBasketUseCase: RemoveProductFromBasketUseCase,
+        clearBasketUseCase: ClearBasketUseCase
+    ): ProductsViewModel =
+        ProductsViewModel(
+            getProductsUseCase,
+            addProductToBasketUseCase,
+            removeProductFromBasketUseCase,
+            clearBasketUseCase
+        )
 
     @Provides
-    open fun providesCheckoutViewModel(repository: Repository, resourcesManager: ResourcesManager): CheckoutViewModel =
-        CheckoutViewModel(repository, resourcesManager)
+    open fun providesCheckoutViewModel(
+        getProductsUseCase: GetProductsUseCase,
+        clearBasketUseCase: ClearBasketUseCase,
+        resourcesManager: ResourcesManager
+    ): CheckoutViewModel =
+        CheckoutViewModel(getProductsUseCase, clearBasketUseCase, resourcesManager)
 
     @Singleton
     @Provides
@@ -81,4 +99,24 @@ open class AppModuleForTest {
 
     @Provides
     fun providesViewUtils(): ViewUtils = ViewUtils()
+
+    @Provides
+    @Singleton
+    fun providesGetProductsUseCase(repository: Repository): GetProductsUseCase =
+        GetProductsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesAddProductsToBasketUseCase(repository: Repository): AddProductToBasketUseCase =
+        AddProductToBasketUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesRemoveProductsFromBasketUseCase(repository: Repository): RemoveProductFromBasketUseCase =
+        RemoveProductFromBasketUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesClearBasketUseCase(repository: Repository): ClearBasketUseCase =
+        ClearBasketUseCase(repository)
 }

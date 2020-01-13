@@ -36,7 +36,7 @@ class RepositoryImpl @Inject constructor(
                 getProductsFromCache()
             },
             networkCall = {
-                fetchFromNetwork()
+                getProductsFromNetwork()
             },
             saveCallResult = {
                 saveToDb(it?.products ?: listOf())
@@ -82,7 +82,7 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
-    private suspend fun fetchFromNetwork(): Result<Products> {
+    override suspend fun getProductsFromNetwork(): Result<Products> {
         return try {
             val resp = networkServiceFactory.getServiceInstance().getProducts()
             if (resp.isSuccessful && resp.body() != null) {
