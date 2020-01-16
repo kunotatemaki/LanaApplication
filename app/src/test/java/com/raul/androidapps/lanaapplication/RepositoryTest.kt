@@ -4,8 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.raul.androidapps.lanaapplication.network.AppApi
 import com.raul.androidapps.lanaapplication.network.AppApi.Products
 import com.raul.androidapps.lanaapplication.network.NetworkServiceFactory
@@ -15,6 +13,9 @@ import com.raul.androidapps.lanaapplication.preferences.PreferencesManager
 import com.raul.androidapps.lanaapplication.repository.RepositoryImpl
 import com.raul.androidapps.lanaapplication.utils.RateLimiter
 import com.raul.androidapps.lanaapplication.vo.Result
+import io.mockk.*
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -24,13 +25,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyLong
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.times
-import org.mockito.MockitoAnnotations
 import retrofit2.Response
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -46,22 +41,22 @@ class RepositoryTest {
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
-    @Mock
+    @MockK
     lateinit var networkServiceFactory: NetworkServiceFactory
 
-    @Mock
+    @MockK(relaxed = true)
     lateinit var persistenceManager: PersistenceManager
 
-    @Mock
+    @MockK(relaxed = true)
     lateinit var preferencesManager: PreferencesManager
 
-    @Mock
+    @MockK
     lateinit var rateLimiter: RateLimiter
 
-    @Mock
+    @MockK
     lateinit var api: AppApi
 
-    @InjectMocks
+    @InjectMockKs
     private lateinit var repository: RepositoryImpl
 
     private lateinit var dbResponse: List<ProductEntity>
@@ -79,14 +74,11 @@ class RepositoryTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockKAnnotations.init(this)
         dbResponse = mutableListOf(dbProduct1, dbProduct2, dbProduct3)
         networkResponse = Products(listOf(networkProduct1, networkProduct2, networkProduct3))
         Dispatchers.setMain(mainThreadSurrogate)
-        whenever(networkServiceFactory.getServiceInstance())
-            .thenReturn(
-                api
-            )
+        every { networkServiceFactory.getServiceInstance() } returns api
     }
 
     @After
@@ -100,20 +92,16 @@ class RepositoryTest {
     @Test
     fun `load data from db and make a network call`() {
         runBlocking(Dispatchers.IO) {
-            whenever(persistenceManager.getProducts())
-                .thenReturn(
+            every { persistenceManager.getProducts() } returns
                     MutableLiveData<List<ProductEntity>>().also {
                         it.value = dbResponse
                     }
-                )
-            whenever(api.getProducts())
-                .thenReturn(
-                    Response.success(200, networkResponse)
-                )
-            whenever(rateLimiter.shouldFetch(anyLong(), anyInt(), any(TimeUnit::class.java)))
-                .thenReturn(
-                    true
-                )
+
+            coEvery { api.getProducts() } returns Response.success(200, networkResponse)
+
+            every { rateLimiter.shouldFetch(any(), any(), any()) } returns true
+
+
             val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(2)
@@ -133,20 +121,14 @@ class RepositoryTest {
     @Test
     fun `no data from db and no network call`() {
         runBlocking(Dispatchers.IO) {
-            whenever(persistenceManager.getProducts())
-                .thenReturn(
-                    MutableLiveData<List<ProductEntity>>().also {
-                        it.value = listOf()
-                    }
-                )
-            whenever(api.getProducts())
-                .thenReturn(
-                    Response.success(200, networkResponse)
-                )
-            whenever(rateLimiter.shouldFetch(anyLong(), anyInt(), any(TimeUnit::class.java)))
-                .thenReturn(
-                    false
-                )
+            every { persistenceManager.getProducts() } returns MutableLiveData<List<ProductEntity>>().also {
+                it.value = listOf()
+            }
+
+            coEvery { api.getProducts() } returns Response.success(200, networkResponse)
+
+            every { rateLimiter.shouldFetch(any(), any(), any()) } returns false
+
             val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(1)
@@ -165,20 +147,19 @@ class RepositoryTest {
     @Test
     fun `load data from db and no network call`() {
         runBlocking(Dispatchers.IO) {
-            whenever(persistenceManager.getProducts())
-                .thenReturn(
-                    MutableLiveData<List<ProductEntity>>().also {
-                        it.value = dbResponse
-                    }
-                )
-            whenever(api.getProducts())
-                .thenReturn(
+            every {
+                persistenceManager.getProducts()
+            } returns MutableLiveData<List<ProductEntity>>().also {
+                it.value = dbResponse
+            }
+
+            coEvery {
+                api.getProducts()
+            } returns
                     Response.success(200, networkResponse)
-                )
-            whenever(rateLimiter.shouldFetch(anyLong(), anyInt(), any(TimeUnit::class.java)))
-                .thenReturn(
-                    false
-                )
+
+            every { rateLimiter.shouldFetch(any(), any(), any()) } returns false
+
             val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(1)
@@ -194,28 +175,24 @@ class RepositoryTest {
         }
     }
 
+
     @Test
     fun `load data from db and error in the network call`() {
         runBlocking(Dispatchers.IO) {
-            whenever(persistenceManager.getProducts())
-                .thenReturn(
+            every { persistenceManager.getProducts() } returns
                     MutableLiveData<List<ProductEntity>>().also {
                         it.value = dbResponse
                     }
+
+            coEvery { api.getProducts() } returns Response.error(
+                500,
+                "{\"message\":\"some_value\"}".toResponseBody(
+                    "application/json".toMediaType()
                 )
-            whenever(api.getProducts())
-                .thenReturn(
-                    Response.error(
-                        500,
-                        "{\"message\":\"some_value\"}".toResponseBody(
-                            "application/json".toMediaType()
-                        )
-                    )
-                )
-            whenever(rateLimiter.shouldFetch(anyLong(), anyInt(), any(TimeUnit::class.java)))
-                .thenReturn(
-                    true
-                )
+            )
+
+            every { rateLimiter.shouldFetch(any(), any(), any()) } returns true
+
             val response = repository.getProducts(false)
             val responseObserver = response.test()
             val latch = CountDownLatch(2)
@@ -238,69 +215,78 @@ class RepositoryTest {
     @Test
     fun `load data from db and exception in the network call`() {
         runBlocking(Dispatchers.IO) {
-            whenever(persistenceManager.getProducts())
-                .thenReturn(
-                    MutableLiveData<List<ProductEntity>>().also {
-                        it.value = dbResponse
-                    }
-                )
-            whenever(api.getProducts())
-                .then {
-                    @Suppress("DIVISION_BY_ZERO")
-                    1 / 0
-                }
-            whenever(rateLimiter.shouldFetch(anyLong(), anyInt(), any(TimeUnit::class.java)))
-                .thenReturn(
-                    true
-                )
-            val response = repository.getProducts(false)
-            val responseObserver = response.test()
-            val latch = CountDownLatch(2)
-            val observer = Observer<Result<List<ProductEntity>>> {
+            every {
+                persistenceManager.getProducts()
+            } returns MutableLiveData<List<ProductEntity>>().also {
+                it.value = dbResponse
+            }
+
+            coEvery { api.getProducts() } throws Exception()
+
+        }
+
+        every { rateLimiter.shouldFetch(any(), any(), any()) } returns true
+
+        val response = repository.getProducts(false)
+        val responseObserver = response.test()
+        val latch = CountDownLatch(2)
+        val observer =
+            Observer<Result<List<ProductEntity>>> {
                 latch.countDown()
             }
-            response.observeForever(observer)
-            latch.await(10, TimeUnit.SECONDS)
-            responseObserver
-                .assertHasValue()
-                .assertHistorySize(2)
-                .assertValue(Result.error("error fetching from network", dbResponse))
-                .assertValueHistory(
-                    Result.loading(dbResponse),
-                    Result.error("error fetching from network", dbResponse)
+        response.observeForever(observer)
+        latch.await(10, TimeUnit.SECONDS)
+        responseObserver
+            .assertHasValue()
+            .assertHistorySize(2)
+            .assertValue(
+                Result.error(
+                    "error fetching from network",
+                    dbResponse
                 )
-        }
+            )
+            .assertValueHistory(
+                Result.loading(dbResponse),
+                Result.error(
+                    "error fetching from network",
+                    dbResponse
+                )
+            )
     }
+
 
     @Test
     fun `force to make a network call even when shouldFetch returns false`() {
         runBlocking(Dispatchers.IO) {
-            whenever(persistenceManager.getProducts())
-                .thenReturn(
-                    MutableLiveData<List<ProductEntity>>().also {
-                        it.value = dbResponse
-                    }
-                )
-            whenever(api.getProducts())
-                .thenReturn(
-                    Response.success(200, networkResponse)
-                )
-            whenever(rateLimiter.shouldFetch(anyLong(), anyInt(), any(TimeUnit::class.java)))
-                .thenReturn(
-                    false
-                )
-            val response = repository.getProducts(forceFetchInfo = true)
+            every {
+                persistenceManager.getProducts()
+            } returns MutableLiveData<List<ProductEntity>>().also {
+                it.value = dbResponse
+            }
+
+            coEvery { api.getProducts() } returns Response.success(200, networkResponse)
+
+            every { rateLimiter.shouldFetch(any(), any(), any()) } returns false
+
+            val response = repository.getProducts(
+                forceFetchInfo = true
+            )
             val responseObserver = response.test()
             val latch = CountDownLatch(2)
-            val observer = Observer<Result<List<ProductEntity>>> {
-                latch.countDown()
-            }
+            val observer =
+                Observer<Result<List<ProductEntity>>> {
+                    latch.countDown()
+                }
             response.observeForever(observer)
             latch.await(10, TimeUnit.SECONDS)
             responseObserver
                 .assertHasValue()
                 .assertHistorySize(2)
-                .assertValue(Result.success(dbResponse))
+                .assertValue(
+                    Result.success(
+                        dbResponse
+                    )
+                )
                 .assertValueHistory(
                     Result.loading(dbResponse),
                     Result.success(dbResponse)
@@ -313,7 +299,9 @@ class RepositoryTest {
         val code = "code"
         runBlocking(Dispatchers.IO) {
             repository.addProductToBasket(code)
-            verify(persistenceManager, times(1)).addProductToBasket(code)
+            coVerify(exactly = 1) {
+                persistenceManager.addProductToBasket(code)
+            }
         }
     }
 
@@ -322,25 +310,29 @@ class RepositoryTest {
         val code = "code"
         runBlocking(Dispatchers.IO) {
             repository.removeProductFromBasket(code)
-            verify(persistenceManager, times(1)).removeProductFromBasket(code)
+            coVerify(exactly = 1) {
+                persistenceManager.removeProductFromBasket(code)
+            }
         }
     }
 
     @Test
     fun `verify items in basket loaded`() {
-        val code = "code"
         runBlocking(Dispatchers.IO) {
             repository.getProductsInBasket()
-            verify(persistenceManager, times(1)).getProductsInBasket()
+            coVerify(exactly = 1) {
+                persistenceManager.getProductsInBasket()
+            }
         }
     }
 
     @Test
     fun `verify basket cleared`() {
-        val code = "code"
         runBlocking(Dispatchers.IO) {
             repository.clearBasket()
-            verify(persistenceManager, times(1)).clearBasket()
+            coVerify(exactly = 1) {
+                persistenceManager.clearBasket()
+            }
         }
     }
 

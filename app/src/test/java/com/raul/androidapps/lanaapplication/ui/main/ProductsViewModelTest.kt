@@ -6,7 +6,9 @@ import com.raul.androidapps.lanaapplication.domain.usecase.AddProductToBasketUse
 import com.raul.androidapps.lanaapplication.domain.usecase.ClearBasketUseCase
 import com.raul.androidapps.lanaapplication.domain.usecase.GetProductsUseCase
 import com.raul.androidapps.lanaapplication.domain.usecase.RemoveProductFromBasketUseCase
-import com.raul.androidapps.lanaapplication.repository.Repository
+import io.mockk.MockKAnnotations
+import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -14,10 +16,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations
 
 
 @ObsoleteCoroutinesApi
@@ -29,25 +27,30 @@ class ProductsViewModelTest {
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
-    @Mock
+    @MockK
     private lateinit var getProductsUseCase: GetProductsUseCase
 
-    @Mock
+    @MockK
     private lateinit var addProductToBasketUseCase: AddProductToBasketUseCase
 
-    @Mock
+    @MockK
     private lateinit var removeProductFromBasketUseCase: RemoveProductFromBasketUseCase
 
-    @Mock
+    @MockK
     private lateinit var clearBasketUseCase: ClearBasketUseCase
 
     private lateinit var viewModel: ProductsViewModel
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockKAnnotations.init(this, relaxed = true)
         Dispatchers.setMain(mainThreadSurrogate)
-        viewModel = ProductsViewModel(getProductsUseCase, addProductToBasketUseCase, removeProductFromBasketUseCase, clearBasketUseCase)
+        viewModel = ProductsViewModel(
+            getProductsUseCase,
+            addProductToBasketUseCase,
+            removeProductFromBasketUseCase,
+            clearBasketUseCase
+        )
     }
 
     @After
@@ -74,7 +77,7 @@ class ProductsViewModelTest {
     fun addProductToBasket() {
         runBlocking(Dispatchers.IO) {
             viewModel.addProductToBasket("code").join()
-            verify(addProductToBasketUseCase, times(1)).addProductToBasket("code")
+            coVerify(exactly = 1) { addProductToBasketUseCase.addProductToBasket("code") }
 
         }
     }
@@ -83,7 +86,7 @@ class ProductsViewModelTest {
     fun removeProductToBasket() {
         runBlocking(Dispatchers.IO) {
             viewModel.removeProductToBasket("code").join()
-            verify(removeProductFromBasketUseCase, times(1)).removeProductFromBasket("code")
+            coVerify(exactly = 1) { removeProductFromBasketUseCase.removeProductFromBasket("code") }
 
         }
     }
@@ -92,7 +95,7 @@ class ProductsViewModelTest {
     fun clearBasket() {
         runBlocking(Dispatchers.IO) {
             viewModel.clearBasket().join()
-            verify(clearBasketUseCase, times(1)).clearBasket()
+            coVerify(exactly = 1) { clearBasketUseCase.clearBasket() }
 
         }
 

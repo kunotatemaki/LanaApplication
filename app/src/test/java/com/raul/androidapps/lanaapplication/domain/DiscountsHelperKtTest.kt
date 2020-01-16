@@ -1,17 +1,17 @@
 package com.raul.androidapps.lanaapplication.domain
 
-import com.nhaarman.mockitokotlin2.whenever
 import com.raul.androidapps.lanaapplication.R
 import com.raul.androidapps.lanaapplication.domain.model.Product
 import com.raul.androidapps.lanaapplication.resources.ResourcesManager
 import com.raul.androidapps.lanaapplication.utils.cfoDiscount
 import com.raul.androidapps.lanaapplication.utils.marketingDiscount
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 
 
 class DiscountsHelperKtTest {
@@ -24,20 +24,16 @@ class DiscountsHelperKtTest {
     private val marketingDescription = "marketing description"
     private val cfoDescription = "cfo description"
 
-    @Mock
+    @MockK
     lateinit var resourcesManager: ResourcesManager
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        whenever(resourcesManager.getString(R.string.marketing_discount_description))
-            .thenReturn(
-                marketingDescription
-            )
-        whenever(resourcesManager.getString(R.string.cfo_discount_description))
-            .thenReturn(
-                cfoDescription
-            )
+        MockKAnnotations.init(this, relaxed = true)
+        every { resourcesManager.getString(R.string.marketing_discount_description) } returns marketingDescription
+
+        every { resourcesManager.getString(R.string.cfo_discount_description) } returns cfoDescription
+
     }
 
     @Test
@@ -111,7 +107,6 @@ class DiscountsHelperKtTest {
         assertEquals(discount.description, cfoDescription)
         assertEquals(discount.savedMoney, 0.0, 0.009)
     }
-
 
 
 }
