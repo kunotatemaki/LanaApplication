@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.any
 import com.raul.androidapps.lanaapplication.vo.Result
 import io.mockk.*
 import kotlinx.coroutines.*
@@ -15,6 +14,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentMatchers.any
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

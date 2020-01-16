@@ -25,7 +25,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 import retrofit2.Response
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -86,8 +85,6 @@ class RepositoryTest {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
         mainThreadSurrogate.close()
     }
-
-    private fun <T> any(type: Class<T>): T = Mockito.any<T>(type)
 
     @Test
     fun `load data from db and make a network call`() {
